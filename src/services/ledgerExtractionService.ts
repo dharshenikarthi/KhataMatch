@@ -163,7 +163,7 @@ export const ledgerExtractionService = {
         return {
           data: null,
           error: new Error(
-            'Google Gemini API key required for real OCR extraction. Please click on Shop Settings (top right) or configure VITE_GEMINI_API_KEY in .env with a key from https://aistudio.google.com/app/apikey (starts with AIzaSy).'
+            'Google Gemini API key required for real OCR extraction. Please click on Shop Settings (top right) or configure VITE_GEMINI_API_KEY in .env.'
           ),
         }
       }
