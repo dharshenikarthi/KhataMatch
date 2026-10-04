@@ -61,17 +61,32 @@ export const UploadPage: React.FC = () => {
       return
     }
 
-    const previewUrl = URL.createObjectURL(file)
-    setLedger({
-      name: file.name,
-      size: file.size,
-      type: file.type || 'image/jpeg',
-      previewUrl: previewUrl,
-      fileObj: file,
-      isSample: false,
-    })
-    setSuccessMessage('Ledger image attached successfully.')
-    setTimeout(() => setSuccessMessage(null), 3500)
+    const reader = new FileReader()
+    reader.onload = () => {
+      const dataUrl = reader.result as string
+      setLedger({
+        name: file.name,
+        size: file.size,
+        type: file.type || 'image/jpeg',
+        previewUrl: dataUrl,
+        fileObj: file,
+        isSample: false,
+      })
+      setSuccessMessage('Ledger image attached successfully.')
+      setTimeout(() => setSuccessMessage(null), 3500)
+    }
+    reader.onerror = () => {
+      const previewUrl = URL.createObjectURL(file)
+      setLedger({
+        name: file.name,
+        size: file.size,
+        type: file.type || 'image/jpeg',
+        previewUrl: previewUrl,
+        fileObj: file,
+        isSample: false,
+      })
+    }
+    reader.readAsDataURL(file)
   }
 
   const handleLedgerDrop = (e: DragEvent<HTMLDivElement>) => {

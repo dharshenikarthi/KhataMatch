@@ -24,23 +24,57 @@ export function setGeminiApiKey(key: string): void {
   }
 }
 
-export async function fileToGenerativePart(file: File | Blob): Promise<{ inlineData: { data: string; mimeType: string } }> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      const base64Data = (reader.result as string).split(',')[1]
-      const mimeType = file.type || 'image/jpeg'
-      resolve({
-        inlineData: {
-          data: base64Data,
-          mimeType,
-        },
-      })
+export async function fileToGenerativePart(
+  input: File | Blob | string
+): Promise<{ inlineData: { data: string; mimeType: string } }> {
+  // Case 1: Base64 Data URL (e.g., data:image/jpeg;base64,...)
+  if (typeof input === 'string' && input.startsWith('data:')) {
+    const parts = input.split(',')
+    const mimeMatch = parts[0].match(/:(.*?);/)
+    const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg'
+    const base64Data = parts[1] || ''
+    return {
+      inlineData: {
+        data: base64Data,
+        mimeType,
+      },
     }
-    reader.onerror = reject
-    reader.readAsDataURL(file)
-  })
+  }
+
+  // Case 2: URL string (blob: or http/https or relative path)
+  if (typeof input === 'string') {
+    try {
+      const res = await fetch(input)
+      const blob = await res.blob()
+      return fileToGenerativePart(blob)
+    } catch (e) {
+      console.warn('Failed to fetch image URL, attempting raw reader', e)
+    }
+  }
+
+  // Case 3: Blob / File object
+  if (input instanceof Blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const result = reader.result as string
+        const base64Data = result ? result.split(',')[1] : ''
+        const mimeType = input.type || 'image/jpeg'
+        resolve({
+          inlineData: {
+            data: base64Data,
+            mimeType,
+          },
+        })
+      }
+      reader.onerror = reject
+      reader.readAsDataURL(input)
+    })
+  }
+
+  throw new Error('Invalid image format provided. Please re-select your ledger image.')
 }
+
 
 const EXTRACTION_SYSTEM_PROMPT = `You are an expert OCR and bookkeeping assistant that digitizes handwritten credit/udhaar ledgers from small Indian shops.
 The ledger contains handwritten rows of customers, dates, and amounts (in INR).
@@ -76,7 +110,7 @@ RULES:
 }`
 
 export async function callGeminiVisionExtract(
-  fileOrBlob: File | Blob
+  fileOrBlob: File | Blob | string
 ): Promise<{ entries: Partial<LedgerEntry>[]; page_quality: 'good' | 'fair' | 'poor'; warnings: string[] }> {
   const apiKey = getGeminiApiKey()
   if (!apiKey || !apiKey.trim()) {

@@ -5,11 +5,11 @@ const LOCAL_STORAGE_PROFILE_KEY = 'khatamatch_user_profile'
 
 export const profileService = {
   async getProfile(userId: string): Promise<{ data: Profile | null; error: Error | null }> {
-    if (!isSupabaseConfigured) {
-      const local = localStorage.getItem(`${LOCAL_STORAGE_PROFILE_KEY}_${userId}`)
-      if (local) {
-        return { data: JSON.parse(local), error: null }
-      }
+    const getLocal = (): Profile => {
+      try {
+        const local = localStorage.getItem(`${LOCAL_STORAGE_PROFILE_KEY}_${userId}`)
+        if (local) return JSON.parse(local)
+      } catch {}
       const defaultProfile: Profile = {
         id: userId,
         shop_name: 'Murugan General Stores',
@@ -17,8 +17,14 @@ export const profileService = {
         tone: 'polite',
         created_at: new Date().toISOString(),
       }
-      localStorage.setItem(`${LOCAL_STORAGE_PROFILE_KEY}_${userId}`, JSON.stringify(defaultProfile))
-      return { data: defaultProfile, error: null }
+      try {
+        localStorage.setItem(`${LOCAL_STORAGE_PROFILE_KEY}_${userId}`, JSON.stringify(defaultProfile))
+      } catch {}
+      return defaultProfile
+    }
+
+    if (!isSupabaseConfigured) {
+      return { data: getLocal(), error: null }
     }
 
     try {
@@ -29,7 +35,6 @@ export const profileService = {
         .single()
 
       if (error && error.code === 'PGRST116') {
-        // Record doesn't exist yet, create default
         const defaultProfile: Partial<Profile> = {
           id: userId,
           shop_name: '',
@@ -42,28 +47,37 @@ export const profileService = {
           .select()
           .single()
 
-        return { data: created as Profile, error: insertError ? new Error(insertError.message) : null }
+        if (created) return { data: created as Profile, error: null }
+        return { data: getLocal(), error: null }
       }
 
-      if (error) {
-        return { data: null, error: new Error("Unable to retrieve shop profile. Please try again.") }
+      if (error || !data) {
+        return { data: getLocal(), error: null }
       }
 
       return { data: data as Profile, error: null }
     } catch (err: any) {
-      return { data: null, error: new Error(err.message || "Failed to load profile.") }
+      return { data: getLocal(), error: null }
     }
   },
 
   async updateProfile(userId: string, updates: Partial<Profile>): Promise<{ data: Profile | null; error: Error | null }> {
-    if (!isSupabaseConfigured) {
-      const current = await this.getProfile(userId)
+    const saveLocal = (baseProfile?: Profile | null): Profile => {
       const updated: Profile = {
-        ...(current.data || { id: userId, shop_name: '', preferred_language: 'english', tone: 'polite' }),
+        ...(baseProfile || { id: userId, shop_name: '', preferred_language: 'english', tone: 'polite' }),
         ...updates,
       }
-      localStorage.setItem(`${LOCAL_STORAGE_PROFILE_KEY}_${userId}`, JSON.stringify(updated))
-      return { data: updated, error: null }
+      try {
+        localStorage.setItem(`${LOCAL_STORAGE_PROFILE_KEY}_${userId}`, JSON.stringify(updated))
+      } catch (e) {
+        console.warn('LocalStorage save error:', e)
+      }
+      return updated
+    }
+
+    if (!isSupabaseConfigured) {
+      const current = await this.getProfile(userId)
+      return { data: saveLocal(current.data), error: null }
     }
 
     try {
@@ -76,13 +90,17 @@ export const profileService = {
         .select()
         .single()
 
-      if (error) {
-        return { data: null, error: new Error("Unable to update profile settings. Please try again.") }
+      if (error || !data) {
+        console.warn('Supabase profile upsert error (using local storage):', error?.message)
+        const current = await this.getProfile(userId)
+        return { data: saveLocal(current.data), error: null }
       }
 
       return { data: data as Profile, error: null }
     } catch (err: any) {
-      return { data: null, error: new Error(err.message || "Failed to update profile.") }
+      console.warn('Supabase profile exception (using local storage):', err)
+      const current = await this.getProfile(userId)
+      return { data: saveLocal(current.data), error: null }
     }
   },
 }
