@@ -80,17 +80,20 @@ export async function callGeminiVisionExtract(
 ): Promise<{ entries: Partial<LedgerEntry>[]; page_quality: 'good' | 'fair' | 'poor'; warnings: string[] }> {
   const apiKey = getGeminiApiKey()
   if (!apiKey || !apiKey.trim()) {
-    throw new Error('No Gemini API key found. Please add your Google AI Studio API key (starts with AIzaSy) in Shop Settings.')
+    throw new Error('No Gemini API key found. Please provide an API key in Shop Settings or in .env.')
   }
 
   const cleanKey = apiKey.trim()
-  if (!cleanKey.startsWith('AIzaSy')) {
-    throw new Error('The provided Gemini API key appears invalid (Google Gemini keys start with "AIzaSy"). Please get a free API key from https://aistudio.google.com/app/apikey')
-  }
-
   const imagePart = await fileToGenerativePart(fileOrBlob)
 
-  const models = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-2.0-flash']
+  const models = [
+    'gemini-3.5-flash',
+    'gemini-3-flash-preview',
+    'gemini-flash-latest',
+    'gemini-3.7-flash',
+    'gemini-3.1-flash-lite',
+  ]
+
   let lastError: Error | null = null
 
   for (const model of models) {
@@ -142,8 +145,8 @@ export async function callGeminiVisionExtract(
       }
     } catch (err: any) {
       lastError = err
-      // If error is 400 or invalid key, don't keep retrying other models with the same bad key
-      if (err.message && (err.message.includes('API_KEY_INVALID') || err.message.includes('API key not valid') || err.message.includes('starts with "AIzaSy"'))) {
+      // If error is authentication/permission related, don't keep hammering
+      if (err.message && (err.message.includes('API_KEY_INVALID') || err.message.includes('API key not valid'))) {
         throw err
       }
     }
@@ -151,4 +154,5 @@ export async function callGeminiVisionExtract(
 
   throw lastError || new Error('Failed to extract ledger entries using Gemini.')
 }
+
 
