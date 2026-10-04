@@ -5,9 +5,17 @@ const LOCAL_STORAGE_LEDGER_KEY = 'khatamatch_ledger_entries'
 
 export const ledgerService = {
   async getEntries(userId: string): Promise<{ data: LedgerEntry[]; error: Error | null }> {
+    const getLocal = () => {
+      try {
+        const local = localStorage.getItem(`${LOCAL_STORAGE_LEDGER_KEY}_${userId}`)
+        return local ? JSON.parse(local) : []
+      } catch {
+        return []
+      }
+    }
+
     if (!isSupabaseConfigured) {
-      const local = localStorage.getItem(`${LOCAL_STORAGE_LEDGER_KEY}_${userId}`)
-      return { data: local ? JSON.parse(local) : [], error: null }
+      return { data: getLocal(), error: null }
     }
 
     try {
@@ -17,18 +25,22 @@ export const ledgerService = {
         .eq('user_id', userId)
         .order('created_at', { ascending: false })
 
-      if (error) {
-        return { data: [], error: new Error("Unable to fetch ledger entries.") }
+      if (error || !data || data.length === 0) {
+        const localData = getLocal()
+        if (localData.length > 0) return { data: localData, error: null }
+        if (error) return { data: [], error: new Error("Unable to fetch ledger entries.") }
       }
 
       return { data: (data || []) as LedgerEntry[], error: null }
     } catch (err: any) {
+      const localData = getLocal()
+      if (localData.length > 0) return { data: localData, error: null }
       return { data: [], error: new Error(err.message || "Failed to load ledger.") }
     }
   },
 
   async saveEntries(userId: string, entries: Partial<LedgerEntry>[]): Promise<{ data: LedgerEntry[]; error: Error | null }> {
-    if (!isSupabaseConfigured) {
+    const saveLocal = async () => {
       const current = await this.getEntries(userId)
       const mapped = entries.map((e) => ({
         id: e.id || crypto.randomUUID(),
@@ -42,12 +54,21 @@ export const ledgerService = {
         confidence: e.confidence !== undefined ? e.confidence : 1.0,
         source_image_path: e.source_image_path || null,
         confirmed: e.confirmed ?? false,
+        note: e.note || null,
         created_at: new Date().toISOString(),
       })) as LedgerEntry[]
 
       const updated = [...mapped, ...current.data.filter(c => !mapped.some(m => m.id === c.id))]
-      localStorage.setItem(`${LOCAL_STORAGE_LEDGER_KEY}_${userId}`, JSON.stringify(updated))
+      try {
+        localStorage.setItem(`${LOCAL_STORAGE_LEDGER_KEY}_${userId}`, JSON.stringify(updated))
+      } catch (e) {
+        console.warn('LocalStorage save error:', e)
+      }
       return { data: mapped, error: null }
+    }
+
+    if (!isSupabaseConfigured) {
+      return saveLocal()
     }
 
     try {
@@ -62,13 +83,15 @@ export const ledgerService = {
         .insert(formatted)
         .select()
 
-      if (error) {
-        return { data: [], error: new Error("Unable to save extracted ledger entries.") }
+      if (error || !data || data.length === 0) {
+        console.warn('Supabase save failed, falling back to local storage:', error?.message)
+        return saveLocal()
       }
 
       return { data: (data || []) as LedgerEntry[], error: null }
     } catch (err: any) {
-      return { data: [], error: new Error(err.message || "Failed to save ledger entries.") }
+      console.warn('Supabase exception, falling back to local storage:', err)
+      return saveLocal()
     }
   },
 
