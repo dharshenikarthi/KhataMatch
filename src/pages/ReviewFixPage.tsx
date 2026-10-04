@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useWorkflowState } from '@/hooks/useWorkflowState'
 import { ledgerReviewService } from '@/services/ledgerReviewService'
+import { csvParserService } from '@/services/csvParserService'
+import { paymentImportService } from '@/services/paymentImportService'
 import { LedgerEntry } from '@/types'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -123,7 +125,11 @@ export const ReviewFixPage: React.FC = () => {
       return false
     }
 
-    setEntries((prev) => prev.map((e) => (e.id === data.id ? data : e)))
+    setEntries((prev) => {
+      const updated = prev.map((e) => (e.id === data.id ? data : e))
+      setExtractedData(updated)
+      return updated
+    })
     showFeedback('Entry updated successfully. You can now confirm it.')
     return true
   }
@@ -140,7 +146,11 @@ export const ReviewFixPage: React.FC = () => {
       if (error || !data) {
         showFeedback(error?.message || 'Unable to confirm entry.', 'error')
       } else {
-        setEntries((prev) => prev.map((e) => (e.id === data.id ? data : e)))
+        setEntries((prev) => {
+          const updated = prev.map((e) => (e.id === data.id ? data : e))
+          setExtractedData(updated)
+          return updated
+        })
         showFeedback(`✓ Confirmed ${data.customer_name} (${formatINR(data.amount)})`)
       }
     } finally {
@@ -153,7 +163,11 @@ export const ReviewFixPage: React.FC = () => {
     if (error || !data) {
       showFeedback('Unable to reopen entry.', 'error')
     } else {
-      setEntries((prev) => prev.map((e) => (e.id === data.id ? data : e)))
+      setEntries((prev) => {
+        const updated = prev.map((e) => (e.id === data.id ? data : e))
+        setExtractedData(updated)
+        return updated
+      })
       showFeedback(`Reopened ${data.customer_name} for editing.`, 'warning')
     }
   }
@@ -187,12 +201,38 @@ export const ReviewFixPage: React.FC = () => {
       if (error) {
         showFeedback('Bulk confirmation encountered an error.', 'error')
       } else {
-        await loadEntriesAndImage()
+        const { data } = await ledgerReviewService.getLedgerEntries(userId)
+        if (data && data.length > 0) {
+          setEntries(data)
+          setExtractedData(data)
+        }
         showFeedback(`Successfully confirmed ${confirmedCount} entries.${failedCount > 0 ? ` (${failedCount} failed)` : ''}`)
       }
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleProceedToMatches = async () => {
+    // Ensure statement CSV is imported before opening matches
+    if (state.statement) {
+      let csvText = state.statement.csvContent
+      if (!csvText && state.statement.isSample) {
+        try {
+          const res = await fetch('/sample-data/sample-statement.csv')
+          csvText = await res.text()
+        } catch (e) {
+          console.error('Failed to fetch sample statement CSV:', e)
+        }
+      }
+      if (csvText) {
+        const parsed = csvParserService.parseCsvString(csvText)
+        if (parsed.rows && parsed.rows.length > 0) {
+          await paymentImportService.importPayments(userId, parsed.rows, { includeDuplicates: false })
+        }
+      }
+    }
+    navigate('/matches')
   }
 
   // --- METRICS & COUNTS ---
@@ -263,7 +303,7 @@ export const ReviewFixPage: React.FC = () => {
           )}
 
           <Button
-            onClick={() => navigate('/matches')}
+            onClick={handleProceedToMatches}
             className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold rounded-xl shadow-md h-10 px-4"
           >
             <span>Proceed to Step 3: Matches</span>

@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
+import { useWorkflowState } from '@/hooks/useWorkflowState'
 import { matchService } from '@/services/matchService'
 import { paymentService } from '@/services/paymentService'
 import { ledgerService } from '@/services/ledgerService'
 import { deterministicMatchService } from '@/services/deterministicMatchService'
 import { aiMatchService } from '@/services/aiMatchService'
+import { csvParserService } from '@/services/csvParserService'
+import { paymentImportService } from '@/services/paymentImportService'
 import {
   balanceTrackingService,
   LedgerBalanceRecord,
@@ -66,6 +69,7 @@ type BalanceFilterCategory = 'all' | 'unpaid' | 'partially_paid' | 'fully_paid' 
 export const MatchesPage: React.FC = () => {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { state } = useWorkflowState()
 
   // Navigation & Sub-views
   const [activeMainTab, setActiveMainTab] = useState<MainTab>('matches')
@@ -115,34 +119,53 @@ export const MatchesPage: React.FC = () => {
   const loadMatchesData = async () => {
     setLoading(true)
     try {
-      const [paymentsRes, ledgerRes, existingMatchesRes] = await Promise.all([
+      const [paymentsRes, ledgerRes] = await Promise.all([
         paymentService.getPayments(userId),
         ledgerService.getEntries(userId),
-        matchService.getMatches(userId),
       ])
 
-      const fetchedPayments = paymentsRes.data || []
-      const fetchedLedger = ledgerRes.data || []
+      let fetchedPayments = paymentsRes.data || []
+      let fetchedLedger = ledgerRes.data || []
+
+      // If payments table is empty, auto-import from workflow state statement or fallback sample CSV
+      if (fetchedPayments.length === 0) {
+        let csvText = state.statement?.csvContent
+        if (!csvText && (state.statement?.isSample || state.sampleLoaded || fetchedLedger.length > 0)) {
+          try {
+            const res = await fetch('/sample-data/sample-statement.csv')
+            csvText = await res.text()
+          } catch (e) {
+            console.error('Failed to fetch sample statement CSV in MatchesPage:', e)
+          }
+        }
+        if (csvText) {
+          const parsed = csvParserService.parseCsvString(csvText)
+          if (parsed.rows && parsed.rows.length > 0) {
+            await paymentImportService.importPayments(userId, parsed.rows, { includeDuplicates: false })
+            const pRes = await paymentService.getPayments(userId)
+            fetchedPayments = pRes.data || []
+          }
+        }
+      }
+
+      // If ledger is empty in storage but available in workflow state
+      if (fetchedLedger.length === 0 && state.extractedEntries && state.extractedEntries.length > 0) {
+        await ledgerService.saveEntries(userId, state.extractedEntries)
+        const lRes = await ledgerService.getEntries(userId)
+        fetchedLedger = lRes.data || []
+      }
 
       setPayments(fetchedPayments)
       setLedgerEntries(fetchedLedger)
 
-      if (existingMatchesRes.data.length === 0 && fetchedPayments.length > 0 && fetchedLedger.length > 0) {
-        const engineResult = deterministicMatchService.runMatching(fetchedPayments, fetchedLedger, {
-          maxDateWindowDays: dateWindowDays,
-        })
-        const saved = await matchService.saveMatches(userId, engineResult.matches)
-        setMatches(saved.data)
-        setUnmatchedLedger(engineResult.unmatchedLedgerEntries)
-        setUnmatchedPayments(engineResult.unmatchedPayments)
-      } else {
-        const engineResult = deterministicMatchService.runMatching(fetchedPayments, fetchedLedger, {
-          maxDateWindowDays: dateWindowDays,
-        })
-        setMatches(existingMatchesRes.data.length > 0 ? existingMatchesRes.data : engineResult.matches)
-        setUnmatchedLedger(engineResult.unmatchedLedgerEntries)
-        setUnmatchedPayments(engineResult.unmatchedPayments)
-      }
+      // Run matching engine and save/sync matches
+      const engineResult = deterministicMatchService.runMatching(fetchedPayments, fetchedLedger, {
+        maxDateWindowDays: dateWindowDays,
+      })
+      const saved = await matchService.saveMatches(userId, engineResult.matches)
+      setMatches(saved.data)
+      setUnmatchedLedger(engineResult.unmatchedLedgerEntries)
+      setUnmatchedPayments(engineResult.unmatchedPayments)
     } catch (err: any) {
       console.error('Failed to load matches data:', err)
       showToast('Error loading payment matches.', 'error')
@@ -789,9 +812,16 @@ export const MatchesPage: React.FC = () => {
                             <div>
                               {match.ledger_entry ? (
                                 <>
-                                  <p className="text-xs font-extrabold text-slate-900 truncate">
-                                    {match.ledger_entry.customer_name}
-                                  </p>
+                                  <div className="flex items-center space-x-1.5">
+                                    <p className="text-xs font-extrabold text-slate-900 truncate">
+                                      {match.ledger_entry.customer_name}
+                                    </p>
+                                    {match.ledger_entry.confirmed && (
+                                      <span className="text-[9px] font-bold text-emerald-800 bg-emerald-100/90 border border-emerald-300 px-1.5 py-0.2 rounded-md">
+                                        ✓ Ledger Confirmed
+                                      </span>
+                                    )}
+                                  </div>
                                   <p className="text-[11px] text-emerald-700 font-bold">
                                     {formatINR(match.ledger_entry.amount)} • {formatDate(match.ledger_entry.entry_date)}
                                   </p>
@@ -991,10 +1021,19 @@ export const MatchesPage: React.FC = () => {
                       >
                         {/* Customer & Ledger Info */}
                         <div className="flex-1 space-y-1.5">
-                          <div className="flex items-center space-x-2.5">
+                          <div className="flex flex-wrap items-center gap-2">
                             <span className="text-sm font-extrabold text-slate-900">
                               {record.customerName}
                             </span>
+                            {record.ledgerEntry.confirmed ? (
+                              <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100/90 border border-emerald-300 px-2 py-0.5 rounded-full">
+                                ✓ Ledger Confirmed
+                              </span>
+                            ) : (
+                              <span className="text-[10px] font-bold text-slate-500 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full">
+                                Unconfirmed Entry
+                              </span>
+                            )}
                             {isSettled ? (
                               <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
                                 ✓ Fully Paid

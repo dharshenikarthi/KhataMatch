@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useWorkflowState } from '@/hooks/useWorkflowState'
 import { useAuth } from '@/hooks/useAuth'
 import { ledgerExtractionService } from '@/services/ledgerExtractionService'
+import { csvParserService } from '@/services/csvParserService'
+import { paymentImportService } from '@/services/paymentImportService'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
@@ -235,6 +237,26 @@ export const UploadPage: React.FC = () => {
         extractRes.data.page_quality,
         extractRes.data.warnings
       )
+
+      // Step 4: Import bank/UPI statement CSV if attached
+      if (state.statement) {
+        setProcessingStep('Importing bank & UPI statement payments...')
+        let csvText = state.statement.csvContent
+        if (!csvText && state.statement.isSample) {
+          try {
+            const res = await fetch('/sample-data/sample-statement.csv')
+            csvText = await res.text()
+          } catch (e) {
+            console.error('Failed to fetch sample statement csv', e)
+          }
+        }
+        if (csvText) {
+          const parsed = csvParserService.parseCsvString(csvText)
+          if (parsed.rows && parsed.rows.length > 0) {
+            await paymentImportService.importPayments(userId, parsed.rows, { includeDuplicates: false })
+          }
+        }
+      }
 
       setProcessingStep('Ledger ready for review.')
       await new Promise((r) => setTimeout(r, 300))
