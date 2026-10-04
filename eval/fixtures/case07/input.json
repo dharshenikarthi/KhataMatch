@@ -1,0 +1,45 @@
+{
+  "ledger_raw": [
+    {
+      "id": "case07_l1",
+      "customer_name": "Karthik",
+      "amount": 2000,
+      "entry_date": "2026-09-14",
+      "type": "credit",
+      "status": "active"
+    }
+  ],
+  "payments_raw": [
+    {
+      "id": "case07_p1",
+      "payer_name": "KARTHIK",
+      "amount": 800,
+      "paid_at": "2026-09-14",
+      "reference": "UPI/7890123456"
+    }
+  ],
+  "simulated_extraction": {
+    "entries": [
+      {
+        "customer_name": "Karthik",
+        "amount": 2000,
+        "entry_date": "2026-09-14",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.96
+      }
+    ],
+    "page_quality": "good"
+  },
+  "simulated_ai_response": {
+    "decision": "likely_match",
+    "confidence_category": "high",
+    "confidence": 0.88,
+    "reasons": [
+      "Payer name matches Karthik and ₹800 represents a valid partial installment against ₹2,000 credit."
+    ],
+    "warnings": [
+      "Remaining balance of ₹1,200 remains unpaid."
+    ]
+  }
+}

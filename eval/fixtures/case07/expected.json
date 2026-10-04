@@ -1,0 +1,29 @@
+{
+  "extraction": {
+    "entries_count": 1,
+    "entries": [
+      {
+        "customer_name": "Karthik",
+        "amount": 2000,
+        "entry_date": "2026-09-14",
+        "type": "credit"
+      }
+    ]
+  },
+  "matching": {
+    "matches": [
+      {
+        "payment_id": "case07_p1",
+        "ledger_entry_id": "case07_l1",
+        "rule": "RULE_4_PARTIAL_PAYMENT",
+        "expected_type": "partial_payment"
+      }
+    ],
+    "unmatched_payments": [],
+    "unmatched_ledger_entries": []
+  },
+  "ai_decision": {
+    "expected_decision": "likely_match",
+    "min_confidence": 0.8
+  }
+}

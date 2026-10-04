@@ -1,0 +1,26 @@
+{
+  "ledger_raw": [
+    {
+      "id": "case08_l1",
+      "customer_name": "Deepa",
+      "amount": 3500,
+      "entry_date": "2026-08-25",
+      "type": "credit",
+      "status": "active"
+    }
+  ],
+  "payments_raw": [],
+  "simulated_extraction": {
+    "entries": [
+      {
+        "customer_name": "Deepa",
+        "amount": 3500,
+        "entry_date": "2026-08-25",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.95
+      }
+    ],
+    "page_quality": "good"
+  }
+}

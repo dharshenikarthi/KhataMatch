@@ -1,0 +1,26 @@
+{
+  "extraction": {
+    "entries_count": 1,
+    "entries": [
+      {
+        "customer_name": "Muthu Velu",
+        "amount": 650,
+        "entry_date": "2026-09-02",
+        "type": "credit"
+      }
+    ]
+  },
+  "matching": {
+    "matches": [
+      {
+        "payment_id": "case12_p1",
+        "ledger_entry_id": "case12_l1",
+        "rule": "RULE_1_EXACT_MATCH",
+        "expected_type": "exact_match"
+      }
+    ],
+    "unmatched_payments": [],
+    "unmatched_ledger_entries": []
+  },
+  "ai_decision": null
+}

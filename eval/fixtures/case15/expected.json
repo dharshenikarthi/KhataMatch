@@ -1,0 +1,23 @@
+{
+  "extraction": {
+    "entries_count": 1,
+    "entries": [
+      {
+        "customer_name": "Ramesh Sharma",
+        "amount": 1200,
+        "entry_date": "2026-09-10",
+        "type": "credit"
+      }
+    ]
+  },
+  "matching": {
+    "matches": [],
+    "unmatched_payments": [
+      "case15_p1"
+    ],
+    "unmatched_ledger_entries": [
+      "case15_l1"
+    ]
+  },
+  "ai_decision": null
+}

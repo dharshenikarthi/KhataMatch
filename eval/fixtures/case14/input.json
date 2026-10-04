@@ -1,0 +1,43 @@
+{
+  "ledger_raw": [
+    {
+      "id": "case14_l1",
+      "customer_name": "Sureshbabu",
+      "amount": 1800,
+      "entry_date": "2026-09-16",
+      "type": "credit",
+      "status": "active"
+    }
+  ],
+  "payments_raw": [
+    {
+      "id": "case14_p1",
+      "payer_name": "SURESH BABU",
+      "amount": 1800,
+      "paid_at": "2026-09-16",
+      "reference": "UPI/4455667788"
+    }
+  ],
+  "simulated_extraction": {
+    "entries": [
+      {
+        "customer_name": "Sureshbabu",
+        "amount": 1800,
+        "entry_date": "2026-09-16",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.93
+      }
+    ],
+    "page_quality": "good"
+  },
+  "simulated_ai_response": {
+    "decision": "likely_match",
+    "confidence_category": "high",
+    "confidence": 0.94,
+    "reasons": [
+      "Sureshbabu and Suresh Babu are standard spelling variants of the same name with exact amount ₹1,800."
+    ],
+    "warnings": []
+  }
+}

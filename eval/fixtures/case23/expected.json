@@ -1,0 +1,34 @@
+{
+  "extraction": {
+    "entries_count": 2,
+    "entries": [
+      {
+        "customer_name": "Prakash",
+        "amount": 1000,
+        "entry_date": "2026-09-01",
+        "type": "credit"
+      },
+      {
+        "customer_name": "Prakash",
+        "amount": 1500,
+        "entry_date": "2026-09-15",
+        "type": "credit"
+      }
+    ]
+  },
+  "matching": {
+    "matches": [
+      {
+        "payment_id": "case23_p1",
+        "ledger_entry_id": "case23_l1",
+        "rule": "RULE_1_EXACT_MATCH",
+        "expected_type": "exact_match"
+      }
+    ],
+    "unmatched_payments": [],
+    "unmatched_ledger_entries": [
+      "case23_l2"
+    ]
+  },
+  "ai_decision": null
+}

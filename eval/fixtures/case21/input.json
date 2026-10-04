@@ -1,0 +1,43 @@
+{
+  "ledger_raw": [
+    {
+      "id": "case21_l1",
+      "customer_name": "Balaji Grocery",
+      "amount": 1750,
+      "entry_date": "2026-09-18",
+      "type": "credit",
+      "status": "active"
+    }
+  ],
+  "payments_raw": [
+    {
+      "id": "case21_p1",
+      "payer_name": "REVATHI BALAJI",
+      "amount": 1750,
+      "paid_at": "2026-09-18",
+      "reference": "UPI/1011121314"
+    }
+  ],
+  "simulated_extraction": {
+    "entries": [
+      {
+        "customer_name": "Balaji Grocery",
+        "amount": 1750,
+        "entry_date": "2026-09-18",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.92
+      }
+    ],
+    "page_quality": "good"
+  },
+  "simulated_ai_response": {
+    "decision": "likely_match",
+    "confidence_category": "high",
+    "confidence": 0.89,
+    "reasons": [
+      "Revathi Balaji shares the primary identifier Balaji with exact ₹1,750 on identical date."
+    ],
+    "warnings": []
+  }
+}

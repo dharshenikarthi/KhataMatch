@@ -1,0 +1,292 @@
+{
+  "dataset_version": "1.0",
+  "evaluation_mode": "fixture_deterministic",
+  "timestamp": "2026-10-04T13:53:14.521Z",
+  "total_cases": 25,
+  "passed_cases": 25,
+  "failed_cases": 0,
+  "overall_pass_rate_pct": 100,
+  "extraction": {
+    "name_accuracy": 1,
+    "amount_accuracy": 1,
+    "date_accuracy": 1,
+    "complete_row_accuracy": 1,
+    "total_evaluated_rows": 28,
+    "correct_rows": 28,
+    "correct_names": 28,
+    "correct_amounts": 28,
+    "correct_dates": 28,
+    "missing_fields": 0,
+    "extra_entries": 0
+  },
+  "deterministic_matching": {
+    "true_positives": 22,
+    "false_positives": 0,
+    "false_negatives": 0,
+    "precision": 1,
+    "recall": 1,
+    "f1_score": 1,
+    "unmatched_payments_precision": 1,
+    "unmatched_ledger_precision": 1
+  },
+  "gemini_matching": {
+    "total_ai_cases": 6,
+    "correct_decisions": 6,
+    "likely_match_accuracy": 1,
+    "uncertain_decision_accuracy": 1,
+    "rejection_accuracy": 1,
+    "overall_ai_accuracy": 1
+  },
+  "case_results": [
+    {
+      "case_id": "case01",
+      "name": "Clear Ledger Exact Match",
+      "category": "exact_match",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case02",
+      "name": "Name Initial Variation",
+      "category": "name_variation",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case03",
+      "name": "Tamil Annotation in Ledger Name",
+      "category": "annotation_handling",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case04",
+      "name": "Slight Date Proximity Gap",
+      "category": "date_proximity",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case05",
+      "name": "Large Date Gap Name & Amount Match",
+      "category": "rule2_match",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case06",
+      "name": "Family Member Payment (Different Name)",
+      "category": "rule3_ambiguous",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case07",
+      "name": "Partial Payment Detection",
+      "category": "partial_payment",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case08",
+      "name": "Unpaid Ledger Credit Entry",
+      "category": "unpaid_due",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case09",
+      "name": "Unmatched Bank Payment",
+      "category": "unmatched_payment",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case10",
+      "name": "Multiple Duplicate Amounts with Distinct Names",
+      "category": "duplicate_amounts",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case11",
+      "name": "Multiple Payments Competing for Single Ledger Entry",
+      "category": "competing_payments",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case12",
+      "name": "Difficult Cursive Handwriting Extraction",
+      "category": "difficult_handwriting",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case13",
+      "name": "Different Date Formats (DD/MM/YYYY vs ISO)",
+      "category": "date_formatting",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case14",
+      "name": "Spelling Variation (Sureshbabu vs Suresh Babu)",
+      "category": "spelling_variation",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case15",
+      "name": "Similar Names Prevention (Ramesh vs Rajesh)",
+      "category": "false_match_prevention",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case16",
+      "name": "Missing Customer Name in Ledger",
+      "category": "missing_data",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case17",
+      "name": "Missing Date in Ledger Entry",
+      "category": "missing_data",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case18",
+      "name": "Struck Out Settled Cash Entry",
+      "category": "struck_out_entry",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case19",
+      "name": "High Value Transaction with Minor Paise",
+      "category": "precision_paise",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case20",
+      "name": "AI Ambiguous Nickname Match (Chitra Akka)",
+      "category": "ai_ambiguous",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case21",
+      "name": "AI Match for Family Business Account",
+      "category": "ai_ambiguous",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case22",
+      "name": "AI Rejection of Unlikely Match",
+      "category": "ai_rejection",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case23",
+      "name": "Repeated Customer Multiple Credit Entries",
+      "category": "multi_entry_customer",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case24",
+      "name": "Overpayment / Advance Payment",
+      "category": "overpayment",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    },
+    {
+      "case_id": "case25",
+      "name": "Complex Multi-Row Mixed Batch",
+      "category": "end_to_end_batch",
+      "passed": true,
+      "extraction_passed": true,
+      "matching_passed": true,
+      "ai_passed": true,
+      "failures": []
+    }
+  ]
+}

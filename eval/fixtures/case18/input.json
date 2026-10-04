@@ -1,0 +1,26 @@
+{
+  "ledger_raw": [
+    {
+      "id": "case18_l1",
+      "customer_name": "Gopal",
+      "amount": 1100,
+      "entry_date": "2026-09-01",
+      "type": "credit",
+      "status": "struck_out"
+    }
+  ],
+  "payments_raw": [],
+  "simulated_extraction": {
+    "entries": [
+      {
+        "customer_name": "Gopal",
+        "amount": 1100,
+        "entry_date": "2026-09-01",
+        "type": "credit",
+        "status": "struck_out",
+        "confidence": 0.95
+      }
+    ],
+    "page_quality": "good"
+  }
+}

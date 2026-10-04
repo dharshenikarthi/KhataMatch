@@ -1,0 +1,43 @@
+{
+  "ledger_raw": [
+    {
+      "id": "case20_l1",
+      "customer_name": "Chitra Akka",
+      "amount": 2200,
+      "entry_date": "2026-09-15",
+      "type": "credit",
+      "status": "active"
+    }
+  ],
+  "payments_raw": [
+    {
+      "id": "case20_p1",
+      "payer_name": "CHITRA DEVI",
+      "amount": 2200,
+      "paid_at": "2026-09-15",
+      "reference": "UPI/9900112233"
+    }
+  ],
+  "simulated_extraction": {
+    "entries": [
+      {
+        "customer_name": "Chitra Akka",
+        "amount": 2200,
+        "entry_date": "2026-09-15",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.94
+      }
+    ],
+    "page_quality": "good"
+  },
+  "simulated_ai_response": {
+    "decision": "likely_match",
+    "confidence_category": "high",
+    "confidence": 0.91,
+    "reasons": [
+      "Chitra Akka is a respectful address for Chitra Devi, with exact same amount ₹2,200 and identical date."
+    ],
+    "warnings": []
+  }
+}

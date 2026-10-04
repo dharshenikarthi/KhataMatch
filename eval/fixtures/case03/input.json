@@ -1,0 +1,34 @@
+{
+  "ledger_raw": [
+    {
+      "id": "case03_l1",
+      "customer_name": "Priya (தையல்)",
+      "amount": 800,
+      "entry_date": "2026-09-15",
+      "type": "credit",
+      "status": "active"
+    }
+  ],
+  "payments_raw": [
+    {
+      "id": "case03_p1",
+      "payer_name": "PRIYA",
+      "amount": 800,
+      "paid_at": "2026-09-15",
+      "reference": "UPI/3456789012"
+    }
+  ],
+  "simulated_extraction": {
+    "entries": [
+      {
+        "customer_name": "Priya (தையல்)",
+        "amount": 800,
+        "entry_date": "2026-09-15",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.92
+      }
+    ],
+    "page_quality": "good"
+  }
+}

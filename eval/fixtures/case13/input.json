@@ -1,0 +1,34 @@
+{
+  "ledger_raw": [
+    {
+      "id": "case13_l1",
+      "customer_name": "Gita",
+      "amount": 1750,
+      "entry_date": "2026-09-15",
+      "type": "credit",
+      "status": "active"
+    }
+  ],
+  "payments_raw": [
+    {
+      "id": "case13_p1",
+      "payer_name": "GITA",
+      "amount": 1750,
+      "paid_at": "2026-09-15",
+      "reference": "UPI/3344556677"
+    }
+  ],
+  "simulated_extraction": {
+    "entries": [
+      {
+        "customer_name": "Gita",
+        "amount": 1750,
+        "entry_date": "2026-09-15",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.94
+      }
+    ],
+    "page_quality": "good"
+  }
+}

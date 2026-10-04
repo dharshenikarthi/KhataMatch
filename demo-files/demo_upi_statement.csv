@@ -1,0 +1,37 @@
+Date,Payer Name,Amount,Transaction Type,Transaction ID,Description
+2026-09-01,UPI-RAVI KUMAR,1500.00,Credit,UPI/624501987654,UPI Payment from Ravi Kumar
+2026-09-02,UPI-K MURUGAN,2500.00,Credit,UPI/624502876543,Payment from K Murugan via PhonePe
+2026-09-02,PRIYA,800.00,Credit,UPI/624503765432,UPI/Priya/Paytm transfer
+2026-09-04,SURESH KUMAR,1200.00,Credit,UPI/624504654321,GPay payment Suresh Kumar
+2026-08-30,UPI/ANAND S,3000.00,Credit,UPI/624505543210,IMPS/Anand S wedding suit tailoring
+2026-09-05,RAJESH,500.00,Credit,UPI/624506432109,UPI/Rajesh
+2026-09-05,DINESH,500.00,Credit,UPI/624507321098,UPI/Dinesh
+2026-09-08,SARAVANAN,1000.00,Credit,UPI/624508210987,GPay/Saravanan
+2026-09-10,MUTHU VELU,650.00,Credit,UPI/624509109876,BHIM/Muthu Velu tailoring
+2026-09-11,GITA,1750.00,Credit,UPI/624510098765,UPI transfer from Gita
+2026-09-12,SURESH BABU,1800.00,Credit,UPI/624511987654,PhonePe from Suresh Babu
+2026-09-14,LAKSHMI,950.00,Credit,UPI/624512876543,UPI/Lakshmi blouse stitching
+2026-09-16,VASANTH ENTERPRISES,12450.50,Credit,UPI/624513765432,NEFT/Vasanth Enterprises uniform order
+2026-09-21,PRAKASH,1000.00,Credit,UPI/624514654321,UPI/Prakash shirt tailoring
+2026-09-22,BABU,1500.00,Credit,UPI/624515543210,UPI transfer from Babu
+2026-09-06,KARTHIK,800.00,Credit,UPI/624516432109,UPI/Karthik safari advance
+2026-09-23,SUNDAR,500.00,Credit,UPI/624517321098,UPI/Sundar partial payment
+2026-09-21,GEETHA,1000.00,Credit,UPI/624518210987,UPI/Geetha salwar tailoring
+2026-09-08,UNKNOWN PAYER,1000.00,Credit,UPI/624519109876,UPI payment received without remitter info
+2026-09-03,Amazon Pay Refund,1299.00,Credit,UPI/624520098765,E-Commerce Refund credited
+2026-09-07,Jio Fiber Commercial Bill Refund,349.00,Credit,UPI/624520198766,Broadband security deposit return
+2026-09-09,Zomato Partner Payout,3450.00,Credit,UPI/624521987654,Weekly online settlement payout
+2026-09-15,Interest Credit - SBI,142.00,Credit,UPI/624522876543,Quarterly savings bank interest
+2026-09-20,Sundaram Rental Security Refund,2500.00,Credit,UPI/624522987655,Shop maintenance deposit return
+2026-09-25,Cashback Credited,50.00,Credit,UPI/624523765432,UPI Merchant Cashback reward
+2026-09-27,Paytm Merchant Incentive,125.00,Credit,UPI/624523876544,QR Soundbox incentive payment
+2026-09-05,TNEB Electricity Bill,1850.00,Debit,UPI/624524654321,Shop EB Bill payment
+2026-09-08,Sewing Needle Supplies,380.00,Debit,UPI/624524765433,Organ needle pack 100 nos
+2026-09-10,Thread & Zipper Wholesale,4200.00,Debit,UPI/624525543210,Purchase of tailoring raw materials
+2026-09-12,Scissors Sharpening & Repair,180.00,Debit,UPI/624525654322,Tailoring shears service
+2026-09-15,Shop Rent - Sundaram,8000.00,Debit,UPI/624526432109,Monthly shop rent transfer
+2026-09-18,Button & Buckle Pack,650.00,Debit,UPI/624526543211,Shirt buttons assorted colours
+2026-09-20,Chai & Refreshments,240.00,Debit,UPI/624527321098,Tea stall payment via UPI
+2026-09-24,Steam Iron Service & Water Filter,450.00,Debit,UPI/624527432100,Gravity iron cleaning
+2026-09-26,Sewing Machine Service,1150.00,Debit,UPI/624528210987,Motor oil & needle replacement
+2026-09-27,Sweeper & Waste Disposal,300.00,Debit,UPI/624528321099,Monthly shop cleaning charges

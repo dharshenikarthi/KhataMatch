@@ -1,0 +1,26 @@
+{
+  "extraction": {
+    "entries_count": 1,
+    "entries": [
+      {
+        "customer_name": "Ganesh",
+        "amount": 500,
+        "entry_date": "2026-09-10",
+        "type": "credit"
+      }
+    ]
+  },
+  "matching": {
+    "matches": [],
+    "unmatched_payments": [
+      "case22_p1"
+    ],
+    "unmatched_ledger_entries": [
+      "case22_l1"
+    ]
+  },
+  "ai_decision": {
+    "expected_decision": "unlikely_match",
+    "max_confidence": 0.3
+  }
+}

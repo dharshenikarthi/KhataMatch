@@ -1,0 +1,985 @@
+[
+  {
+    "id": "case01",
+    "name": "Clear Ledger Exact Match",
+    "category": "exact_match",
+    "description": "Clear handwritten entry with exact amount, exact name, and same day UPI payment.",
+    "difficulty": "easy",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case01_l1", "customer_name": "Ravi Kumar", "amount": 1500, "entry_date": "2026-09-10", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case01_p1", "payer_name": "UPI-RAVI KUMAR", "amount": 1500, "paid_at": "2026-09-10", "reference": "UPI/9876543210" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Ravi Kumar", "amount": 1500, "entry_date": "2026-09-10", "type": "credit", "status": "active", "confidence": 0.96 }
+        ],
+        "page_quality": "good"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Ravi Kumar", "amount": 1500, "entry_date": "2026-09-10", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case01_p1", "ledger_entry_id": "case01_l1", "rule": "RULE_1_EXACT_MATCH", "expected_type": "exact_match" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case02",
+    "name": "Name Initial Variation",
+    "category": "name_variation",
+    "description": "Customer written as Murugan K in ledger and K Murugan in bank statement.",
+    "difficulty": "easy",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case02_l1", "customer_name": "Murugan K", "amount": 2500, "entry_date": "2026-09-12", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case02_p1", "payer_name": "UPI-K MURUGAN", "amount": 2500, "paid_at": "2026-09-13", "reference": "UPI/2345678901" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Murugan K", "amount": 2500, "entry_date": "2026-09-12", "type": "credit", "status": "active", "confidence": 0.94 }
+        ],
+        "page_quality": "good"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Murugan K", "amount": 2500, "entry_date": "2026-09-12", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case02_p1", "ledger_entry_id": "case02_l1", "rule": "RULE_1_EXACT_MATCH", "expected_type": "exact_match" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case03",
+    "name": "Tamil Annotation in Ledger Name",
+    "category": "annotation_handling",
+    "description": "Customer name with Tamil description inside parenthesis in ledger.",
+    "difficulty": "medium",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case03_l1", "customer_name": "Priya (தையல்)", "amount": 800, "entry_date": "2026-09-15", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case03_p1", "payer_name": "PRIYA", "amount": 800, "paid_at": "2026-09-15", "reference": "UPI/3456789012" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Priya (தையல்)", "amount": 800, "entry_date": "2026-09-15", "type": "credit", "status": "active", "confidence": 0.92 }
+        ],
+        "page_quality": "good"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Priya (தையல்)", "amount": 800, "entry_date": "2026-09-15", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case03_p1", "ledger_entry_id": "case03_l1", "rule": "RULE_1_EXACT_MATCH", "expected_type": "exact_match" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case04",
+    "name": "Slight Date Proximity Gap",
+    "category": "date_proximity",
+    "description": "Payment made 3 days after ledger entry date within the 4-day proximity window.",
+    "difficulty": "easy",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case04_l1", "customer_name": "Suresh Kumar", "amount": 1200, "entry_date": "2026-09-01", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case04_p1", "payer_name": "SURESH KUMAR", "amount": 1200, "paid_at": "2026-09-04", "reference": "UPI/4567890123" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Suresh Kumar", "amount": 1200, "entry_date": "2026-09-01", "type": "credit", "status": "active", "confidence": 0.95 }
+        ],
+        "page_quality": "good"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Suresh Kumar", "amount": 1200, "entry_date": "2026-09-01", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case04_p1", "ledger_entry_id": "case04_l1", "rule": "RULE_1_EXACT_MATCH", "expected_type": "exact_match" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case05",
+    "name": "Large Date Gap Name & Amount Match",
+    "category": "rule2_match",
+    "description": "Payment made 20 days later by same customer with exact amount (Rule 2).",
+    "difficulty": "medium",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case05_l1", "customer_name": "Anand S", "amount": 3000, "entry_date": "2026-08-10", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case05_p1", "payer_name": "UPI/ANAND S", "amount": 3000, "paid_at": "2026-08-30", "reference": "UPI/5678901234" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Anand S", "amount": 3000, "entry_date": "2026-08-10", "type": "credit", "status": "active", "confidence": 0.93 }
+        ],
+        "page_quality": "good"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Anand S", "amount": 3000, "entry_date": "2026-08-10", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case05_p1", "ledger_entry_id": "case05_l1", "rule": "RULE_2_NAME_AMOUNT_FAR_DATE", "expected_type": "rule2_match" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case06",
+    "name": "Family Member Payment (Different Name)",
+    "category": "rule3_ambiguous",
+    "description": "Same day and exact amount, but payer name differs from ledger customer name.",
+    "difficulty": "medium",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case06_l1", "customer_name": "Meena", "amount": 450, "entry_date": "2026-09-18", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case06_p1", "payer_name": "UPI-VENKATESH", "amount": 450, "paid_at": "2026-09-18", "reference": "UPI/6789012345" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Meena", "amount": 450, "entry_date": "2026-09-18", "type": "credit", "status": "active", "confidence": 0.95 }
+        ],
+        "page_quality": "good"
+      },
+      "simulated_ai_response": {
+        "decision": "uncertain",
+        "confidence_category": "medium",
+        "confidence": 0.55,
+        "reasons": ["Same date and exact amount match ₹450, but payer name Venkatesh differs from Meena (possible spouse/family account)."],
+        "warnings": ["Confirm with customer if payment was sent via Venkatesh's UPI."]
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Meena", "amount": 450, "entry_date": "2026-09-18", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case06_p1", "ledger_entry_id": "case06_l1", "rule": "RULE_3_AMOUNT_DATE_DIFF_NAME", "expected_type": "ambiguous_match" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": {
+        "expected_decision": "uncertain",
+        "min_confidence": 0.40,
+        "max_confidence": 0.70
+      }
+    }
+  },
+  {
+    "id": "case07",
+    "name": "Partial Payment Detection",
+    "category": "partial_payment",
+    "description": "Customer Karthik owes 2000 and pays 800 installment on same day.",
+    "difficulty": "medium",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case07_l1", "customer_name": "Karthik", "amount": 2000, "entry_date": "2026-09-14", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case07_p1", "payer_name": "KARTHIK", "amount": 800, "paid_at": "2026-09-14", "reference": "UPI/7890123456" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Karthik", "amount": 2000, "entry_date": "2026-09-14", "type": "credit", "status": "active", "confidence": 0.96 }
+        ],
+        "page_quality": "good"
+      },
+      "simulated_ai_response": {
+        "decision": "likely_match",
+        "confidence_category": "high",
+        "confidence": 0.88,
+        "reasons": ["Payer name matches Karthik and ₹800 represents a valid partial installment against ₹2,000 credit."],
+        "warnings": ["Remaining balance of ₹1,200 remains unpaid."]
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Karthik", "amount": 2000, "entry_date": "2026-09-14", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case07_p1", "ledger_entry_id": "case07_l1", "rule": "RULE_4_PARTIAL_PAYMENT", "expected_type": "partial_payment" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": {
+        "expected_decision": "likely_match",
+        "min_confidence": 0.80
+      }
+    }
+  },
+  {
+    "id": "case08",
+    "name": "Unpaid Ledger Credit Entry",
+    "category": "unpaid_due",
+    "description": "Ledger entry with no incoming matching payment in bank statement.",
+    "difficulty": "easy",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case08_l1", "customer_name": "Deepa", "amount": 3500, "entry_date": "2026-08-25", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Deepa", "amount": 3500, "entry_date": "2026-08-25", "type": "credit", "status": "active", "confidence": 0.95 }
+        ],
+        "page_quality": "good"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Deepa", "amount": 3500, "entry_date": "2026-08-25", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": ["case08_l1"]
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case09",
+    "name": "Unmatched Bank Payment",
+    "category": "unmatched_payment",
+    "description": "Incoming bank transaction with no corresponding ledger credit entry.",
+    "difficulty": "easy",
+    "inputs": {
+      "ledger_raw": [],
+      "payments_raw": [
+        { "id": "case09_p1", "payer_name": "Amazon Pay Refund", "amount": 1299, "paid_at": "2026-09-11", "reference": "UPI/8901234567" }
+      ],
+      "simulated_extraction": {
+        "entries": [],
+        "page_quality": "good"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 0,
+        "entries": []
+      },
+      "matching": {
+        "matches": [],
+        "unmatched_payments": ["case09_p1"],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case10",
+    "name": "Multiple Duplicate Amounts with Distinct Names",
+    "category": "duplicate_amounts",
+    "description": "Two ledger entries of identical amount ₹500 with different customer names.",
+    "difficulty": "medium",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case10_l1", "customer_name": "Rajesh", "amount": 500, "entry_date": "2026-09-05", "type": "credit", "status": "active" },
+        { "id": "case10_l2", "customer_name": "Dinesh", "amount": 500, "entry_date": "2026-09-05", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case10_p1", "payer_name": "RAJESH", "amount": 500, "paid_at": "2026-09-05", "reference": "UPI/9012345678" },
+        { "id": "case10_p2", "payer_name": "DINESH", "amount": 500, "paid_at": "2026-09-05", "reference": "UPI/0123456789" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Rajesh", "amount": 500, "entry_date": "2026-09-05", "type": "credit", "status": "active", "confidence": 0.95 },
+          { "customer_name": "Dinesh", "amount": 500, "entry_date": "2026-09-05", "type": "credit", "status": "active", "confidence": 0.95 }
+        ],
+        "page_quality": "good"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 2,
+        "entries": [
+          { "customer_name": "Rajesh", "amount": 500, "entry_date": "2026-09-05", "type": "credit" },
+          { "customer_name": "Dinesh", "amount": 500, "entry_date": "2026-09-05", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case10_p1", "ledger_entry_id": "case10_l1", "rule": "RULE_1_EXACT_MATCH", "expected_type": "exact_match" },
+          { "payment_id": "case10_p2", "ledger_entry_id": "case10_l2", "rule": "RULE_1_EXACT_MATCH", "expected_type": "exact_match" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case11",
+    "name": "Multiple Payments Competing for Single Ledger Entry",
+    "category": "competing_payments",
+    "description": "Two identical amount payments received, but one is named and one is unknown.",
+    "difficulty": "hard",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case11_l1", "customer_name": "Saravanan", "amount": 1000, "entry_date": "2026-09-08", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case11_p1", "payer_name": "SARAVANAN", "amount": 1000, "paid_at": "2026-09-08", "reference": "UPI/1122334455" },
+        { "id": "case11_p2", "payer_name": "UNKNOWN PAYER", "amount": 1000, "paid_at": "2026-09-08", "reference": "UPI/5566778899" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Saravanan", "amount": 1000, "entry_date": "2026-09-08", "type": "credit", "status": "active", "confidence": 0.95 }
+        ],
+        "page_quality": "good"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Saravanan", "amount": 1000, "entry_date": "2026-09-08", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case11_p1", "ledger_entry_id": "case11_l1", "rule": "RULE_1_EXACT_MATCH", "expected_type": "exact_match" }
+        ],
+        "unmatched_payments": ["case11_p2"],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case12",
+    "name": "Difficult Cursive Handwriting Extraction",
+    "category": "difficult_handwriting",
+    "description": "Cursive handwritten name with slight ligature 'Muthu Velu'.",
+    "difficulty": "hard",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case12_l1", "customer_name": "Muthu Velu", "amount": 650, "entry_date": "2026-09-02", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case12_p1", "payer_name": "MUTHU VELU", "amount": 650, "paid_at": "2026-09-02", "reference": "UPI/2233445566" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Muthu Velu", "amount": 650, "entry_date": "2026-09-02", "type": "credit", "status": "active", "confidence": 0.88 }
+        ],
+        "page_quality": "fair"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Muthu Velu", "amount": 650, "entry_date": "2026-09-02", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case12_p1", "ledger_entry_id": "case12_l1", "rule": "RULE_1_EXACT_MATCH", "expected_type": "exact_match" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case13",
+    "name": "Different Date Formats (DD/MM/YYYY vs ISO)",
+    "category": "date_formatting",
+    "description": "Ledger written with Indian slash date format 15/09/2026.",
+    "difficulty": "medium",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case13_l1", "customer_name": "Gita", "amount": 1750, "entry_date": "2026-09-15", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case13_p1", "payer_name": "GITA", "amount": 1750, "paid_at": "2026-09-15", "reference": "UPI/3344556677" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Gita", "amount": 1750, "entry_date": "2026-09-15", "type": "credit", "status": "active", "confidence": 0.94 }
+        ],
+        "page_quality": "good"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Gita", "amount": 1750, "entry_date": "2026-09-15", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case13_p1", "ledger_entry_id": "case13_l1", "rule": "RULE_1_EXACT_MATCH", "expected_type": "exact_match" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case14",
+    "name": "Spelling Variation (Sureshbabu vs Suresh Babu)",
+    "category": "spelling_variation",
+    "description": "Compound name in ledger vs separated tokens in bank statement.",
+    "difficulty": "medium",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case14_l1", "customer_name": "Sureshbabu", "amount": 1800, "entry_date": "2026-09-16", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case14_p1", "payer_name": "SURESH BABU", "amount": 1800, "paid_at": "2026-09-16", "reference": "UPI/4455667788" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Sureshbabu", "amount": 1800, "entry_date": "2026-09-16", "type": "credit", "status": "active", "confidence": 0.93 }
+        ],
+        "page_quality": "good"
+      },
+      "simulated_ai_response": {
+        "decision": "likely_match",
+        "confidence_category": "high",
+        "confidence": 0.94,
+        "reasons": ["Sureshbabu and Suresh Babu are standard spelling variants of the same name with exact amount ₹1,800."],
+        "warnings": []
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Sureshbabu", "amount": 1800, "entry_date": "2026-09-16", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case14_p1", "ledger_entry_id": "case14_l1", "rule": "RULE_3_AMOUNT_DATE_DIFF_NAME", "expected_type": "ambiguous_match" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": {
+        "expected_decision": "likely_match",
+        "min_confidence": 0.85
+      }
+    }
+  },
+  {
+    "id": "case15",
+    "name": "Similar Names Prevention (Ramesh vs Rajesh)",
+    "category": "false_match_prevention",
+    "description": "Similar sounding names with different amounts should not be matched.",
+    "difficulty": "hard",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case15_l1", "customer_name": "Ramesh Sharma", "amount": 1200, "entry_date": "2026-09-10", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case15_p1", "payer_name": "RAJESH SHARMA", "amount": 1300, "paid_at": "2026-09-10", "reference": "UPI/5566778890" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Ramesh Sharma", "amount": 1200, "entry_date": "2026-09-10", "type": "credit", "status": "active", "confidence": 0.95 }
+        ],
+        "page_quality": "good"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Ramesh Sharma", "amount": 1200, "entry_date": "2026-09-10", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [],
+        "unmatched_payments": ["case15_p1"],
+        "unmatched_ledger_entries": ["case15_l1"]
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case16",
+    "name": "Missing Customer Name in Ledger",
+    "category": "missing_data",
+    "description": "Handwritten ledger entry with blank/missing customer name.",
+    "difficulty": "medium",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case16_l1", "customer_name": "", "amount": 400, "entry_date": "2026-09-14", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case16_p1", "payer_name": "UNKNOWN", "amount": 400, "paid_at": "2026-09-14", "reference": "UPI/6677889901" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Unknown", "amount": 400, "entry_date": "2026-09-14", "type": "credit", "status": "active", "confidence": 0.60 }
+        ],
+        "page_quality": "fair"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Unknown", "amount": 400, "entry_date": "2026-09-14", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case16_p1", "ledger_entry_id": "case16_l1", "rule": "RULE_3_AMOUNT_DATE_DIFF_NAME", "expected_type": "ambiguous_match" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case17",
+    "name": "Missing Date in Ledger Entry",
+    "category": "missing_data",
+    "description": "Ledger entry with empty date, matched by Name and Amount.",
+    "difficulty": "medium",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case17_l1", "customer_name": "Lakshmi", "amount": 950, "entry_date": "", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case17_p1", "payer_name": "LAKSHMI", "amount": 950, "paid_at": "2026-09-09", "reference": "UPI/7788990012" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Lakshmi", "amount": 950, "entry_date": "", "type": "credit", "status": "active", "confidence": 0.85 }
+        ],
+        "page_quality": "fair"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Lakshmi", "amount": 950, "entry_date": "", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case17_p1", "ledger_entry_id": "case17_l1", "rule": "RULE_2_NAME_AMOUNT_FAR_DATE", "expected_type": "rule2_match" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case18",
+    "name": "Struck Out Settled Cash Entry",
+    "category": "struck_out_entry",
+    "description": "Entry marked struck-out in ledger notebook should be ignored from active dues.",
+    "difficulty": "medium",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case18_l1", "customer_name": "Gopal", "amount": 1100, "entry_date": "2026-09-01", "type": "credit", "status": "struck_out" }
+      ],
+      "payments_raw": [],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Gopal", "amount": 1100, "entry_date": "2026-09-01", "type": "credit", "status": "struck_out", "confidence": 0.95 }
+        ],
+        "page_quality": "good"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Gopal", "amount": 1100, "entry_date": "2026-09-01", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case19",
+    "name": "High Value Transaction with Minor Paise",
+    "category": "precision_paise",
+    "description": "Transaction with ₹12,450.50 testing integer paise precision arithmetic.",
+    "difficulty": "easy",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case19_l1", "customer_name": "Vasanth Enterprises", "amount": 12450.50, "entry_date": "2026-09-17", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case19_p1", "payer_name": "VASANTH ENTERPRISES", "amount": 12450.50, "paid_at": "2026-09-17", "reference": "UPI/8899001122" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Vasanth Enterprises", "amount": 12450.50, "entry_date": "2026-09-17", "type": "credit", "status": "active", "confidence": 0.98 }
+        ],
+        "page_quality": "good"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Vasanth Enterprises", "amount": 12450.50, "entry_date": "2026-09-17", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case19_p1", "ledger_entry_id": "case19_l1", "rule": "RULE_1_EXACT_MATCH", "expected_type": "exact_match" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case20",
+    "name": "AI Ambiguous Nickname Match (Chitra Akka)",
+    "category": "ai_ambiguous",
+    "description": "Ledger has familial honorific 'Chitra Akka' vs bank statement 'CHITRA DEVI'.",
+    "difficulty": "medium",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case20_l1", "customer_name": "Chitra Akka", "amount": 2200, "entry_date": "2026-09-15", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case20_p1", "payer_name": "CHITRA DEVI", "amount": 2200, "paid_at": "2026-09-15", "reference": "UPI/9900112233" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Chitra Akka", "amount": 2200, "entry_date": "2026-09-15", "type": "credit", "status": "active", "confidence": 0.94 }
+        ],
+        "page_quality": "good"
+      },
+      "simulated_ai_response": {
+        "decision": "likely_match",
+        "confidence_category": "high",
+        "confidence": 0.91,
+        "reasons": ["Chitra Akka is a respectful address for Chitra Devi, with exact same amount ₹2,200 and identical date."],
+        "warnings": []
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Chitra Akka", "amount": 2200, "entry_date": "2026-09-15", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case20_p1", "ledger_entry_id": "case20_l1", "rule": "RULE_3_AMOUNT_DATE_DIFF_NAME", "expected_type": "ambiguous_match" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": {
+        "expected_decision": "likely_match",
+        "min_confidence": 0.85
+      }
+    }
+  },
+  {
+    "id": "case21",
+    "name": "AI Match for Family Business Account",
+    "category": "ai_ambiguous",
+    "description": "Ledger has store name 'Balaji Grocery' vs payer 'REVATHI BALAJI'.",
+    "difficulty": "medium",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case21_l1", "customer_name": "Balaji Grocery", "amount": 1750, "entry_date": "2026-09-18", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case21_p1", "payer_name": "REVATHI BALAJI", "amount": 1750, "paid_at": "2026-09-18", "reference": "UPI/1011121314" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Balaji Grocery", "amount": 1750, "entry_date": "2026-09-18", "type": "credit", "status": "active", "confidence": 0.92 }
+        ],
+        "page_quality": "good"
+      },
+      "simulated_ai_response": {
+        "decision": "likely_match",
+        "confidence_category": "high",
+        "confidence": 0.89,
+        "reasons": ["Revathi Balaji shares the primary identifier Balaji with exact ₹1,750 on identical date."],
+        "warnings": []
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Balaji Grocery", "amount": 1750, "entry_date": "2026-09-18", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case21_p1", "ledger_entry_id": "case21_l1", "rule": "RULE_3_AMOUNT_DATE_DIFF_NAME", "expected_type": "ambiguous_match" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": {
+        "expected_decision": "likely_match",
+        "min_confidence": 0.80
+      }
+    }
+  },
+  {
+    "id": "case22",
+    "name": "AI Rejection of Unlikely Match",
+    "category": "ai_rejection",
+    "description": "Ledger has 'Ganesh' ₹500 vs Payment 'Ganesh Travels' ₹5000 (10x mismatch).",
+    "difficulty": "medium",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case22_l1", "customer_name": "Ganesh", "amount": 500, "entry_date": "2026-09-10", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case22_p1", "payer_name": "GANESH TRAVELS", "amount": 5000, "paid_at": "2026-09-10", "reference": "UPI/2021222324" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Ganesh", "amount": 500, "entry_date": "2026-09-10", "type": "credit", "status": "active", "confidence": 0.95 }
+        ],
+        "page_quality": "good"
+      },
+      "simulated_ai_response": {
+        "decision": "unlikely_match",
+        "confidence_category": "low",
+        "confidence": 0.15,
+        "reasons": ["Amount ₹5,000 is 10 times the ledger credit amount ₹500, and payer represents a commercial enterprise."],
+        "warnings": ["Do not match this payment to individual customer due."]
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Ganesh", "amount": 500, "entry_date": "2026-09-10", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [],
+        "unmatched_payments": ["case22_p1"],
+        "unmatched_ledger_entries": ["case22_l1"]
+      },
+      "ai_decision": {
+        "expected_decision": "unlikely_match",
+        "max_confidence": 0.30
+      }
+    }
+  },
+  {
+    "id": "case23",
+    "name": "Repeated Customer Multiple Credit Entries",
+    "category": "multi_entry_customer",
+    "description": "Same customer has two credit entries; payment on Sept 2 matches Sept 1 entry.",
+    "difficulty": "hard",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case23_l1", "customer_name": "Prakash", "amount": 1000, "entry_date": "2026-09-01", "type": "credit", "status": "active" },
+        { "id": "case23_l2", "customer_name": "Prakash", "amount": 1500, "entry_date": "2026-09-15", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case23_p1", "payer_name": "PRAKASH", "amount": 1000, "paid_at": "2026-09-02", "reference": "UPI/3031323334" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Prakash", "amount": 1000, "entry_date": "2026-09-01", "type": "credit", "status": "active", "confidence": 0.95 },
+          { "customer_name": "Prakash", "amount": 1500, "entry_date": "2026-09-15", "type": "credit", "status": "active", "confidence": 0.95 }
+        ],
+        "page_quality": "good"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 2,
+        "entries": [
+          { "customer_name": "Prakash", "amount": 1000, "entry_date": "2026-09-01", "type": "credit" },
+          { "customer_name": "Prakash", "amount": 1500, "entry_date": "2026-09-15", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case23_p1", "ledger_entry_id": "case23_l1", "rule": "RULE_1_EXACT_MATCH", "expected_type": "exact_match" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": ["case23_l2"]
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case24",
+    "name": "Overpayment / Advance Payment",
+    "category": "overpayment",
+    "description": "Customer owes ₹600 but sends ₹1,000 via UPI.",
+    "difficulty": "medium",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case24_l1", "customer_name": "Geetha", "amount": 600, "entry_date": "2026-09-12", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case24_p1", "payer_name": "GEETHA", "amount": 1000, "paid_at": "2026-09-12", "reference": "UPI/4041424344" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Geetha", "amount": 600, "entry_date": "2026-09-12", "type": "credit", "status": "active", "confidence": 0.95 }
+        ],
+        "page_quality": "good"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 1,
+        "entries": [
+          { "customer_name": "Geetha", "amount": 600, "entry_date": "2026-09-12", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case24_p1", "ledger_entry_id": "case24_l1", "rule": "RULE_4_PARTIAL_PAYMENT", "expected_type": "partial_payment" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": []
+      },
+      "ai_decision": null
+    }
+  },
+  {
+    "id": "case25",
+    "name": "Complex Multi-Row Mixed Batch",
+    "category": "end_to_end_batch",
+    "description": "Comprehensive batch: 1 exact match (Babu), 1 partial payment (Sundar), and 1 unpaid (Kavitha).",
+    "difficulty": "hard",
+    "inputs": {
+      "ledger_raw": [
+        { "id": "case25_l1", "customer_name": "Babu", "amount": 1500, "entry_date": "2026-09-10", "type": "credit", "status": "active" },
+        { "id": "case25_l2", "customer_name": "Sundar", "amount": 2000, "entry_date": "2026-09-11", "type": "credit", "status": "active" },
+        { "id": "case25_l3", "customer_name": "Kavitha", "amount": 750, "entry_date": "2026-09-12", "type": "credit", "status": "active" }
+      ],
+      "payments_raw": [
+        { "id": "case25_p1", "payer_name": "BABU", "amount": 1500, "paid_at": "2026-09-10", "reference": "UPI/5051525354" },
+        { "id": "case25_p2", "payer_name": "SUNDAR", "amount": 500, "paid_at": "2026-09-11", "reference": "UPI/6061626364" }
+      ],
+      "simulated_extraction": {
+        "entries": [
+          { "customer_name": "Babu", "amount": 1500, "entry_date": "2026-09-10", "type": "credit", "status": "active", "confidence": 0.95 },
+          { "customer_name": "Sundar", "amount": 2000, "entry_date": "2026-09-11", "type": "credit", "status": "active", "confidence": 0.95 },
+          { "customer_name": "Kavitha", "amount": 750, "entry_date": "2026-09-12", "type": "credit", "status": "active", "confidence": 0.92 }
+        ],
+        "page_quality": "good"
+      }
+    },
+    "expected": {
+      "extraction": {
+        "entries_count": 3,
+        "entries": [
+          { "customer_name": "Babu", "amount": 1500, "entry_date": "2026-09-10", "type": "credit" },
+          { "customer_name": "Sundar", "amount": 2000, "entry_date": "2026-09-11", "type": "credit" },
+          { "customer_name": "Kavitha", "amount": 750, "entry_date": "2026-09-12", "type": "credit" }
+        ]
+      },
+      "matching": {
+        "matches": [
+          { "payment_id": "case25_p1", "ledger_entry_id": "case25_l1", "rule": "RULE_1_EXACT_MATCH", "expected_type": "exact_match" },
+          { "payment_id": "case25_p2", "ledger_entry_id": "case25_l2", "rule": "RULE_4_PARTIAL_PAYMENT", "expected_type": "partial_payment" }
+        ],
+        "unmatched_payments": [],
+        "unmatched_ledger_entries": ["case25_l3"]
+      },
+      "ai_decision": null
+    }
+  }
+]

@@ -1,0 +1,28 @@
+{
+  "extraction": {
+    "entries_count": 1,
+    "entries": [
+      {
+        "customer_name": "Saravanan",
+        "amount": 1000,
+        "entry_date": "2026-09-08",
+        "type": "credit"
+      }
+    ]
+  },
+  "matching": {
+    "matches": [
+      {
+        "payment_id": "case11_p1",
+        "ledger_entry_id": "case11_l1",
+        "rule": "RULE_1_EXACT_MATCH",
+        "expected_type": "exact_match"
+      }
+    ],
+    "unmatched_payments": [
+      "case11_p2"
+    ],
+    "unmatched_ledger_entries": []
+  },
+  "ai_decision": null
+}

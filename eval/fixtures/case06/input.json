@@ -1,0 +1,45 @@
+{
+  "ledger_raw": [
+    {
+      "id": "case06_l1",
+      "customer_name": "Meena",
+      "amount": 450,
+      "entry_date": "2026-09-18",
+      "type": "credit",
+      "status": "active"
+    }
+  ],
+  "payments_raw": [
+    {
+      "id": "case06_p1",
+      "payer_name": "UPI-VENKATESH",
+      "amount": 450,
+      "paid_at": "2026-09-18",
+      "reference": "UPI/6789012345"
+    }
+  ],
+  "simulated_extraction": {
+    "entries": [
+      {
+        "customer_name": "Meena",
+        "amount": 450,
+        "entry_date": "2026-09-18",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.95
+      }
+    ],
+    "page_quality": "good"
+  },
+  "simulated_ai_response": {
+    "decision": "uncertain",
+    "confidence_category": "medium",
+    "confidence": 0.55,
+    "reasons": [
+      "Same date and exact amount match ₹450, but payer name Venkatesh differs from Meena (possible spouse/family account)."
+    ],
+    "warnings": [
+      "Confirm with customer if payment was sent via Venkatesh's UPI."
+    ]
+  }
+}

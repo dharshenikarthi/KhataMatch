@@ -1,0 +1,41 @@
+{
+  "ledger_raw": [
+    {
+      "id": "case11_l1",
+      "customer_name": "Saravanan",
+      "amount": 1000,
+      "entry_date": "2026-09-08",
+      "type": "credit",
+      "status": "active"
+    }
+  ],
+  "payments_raw": [
+    {
+      "id": "case11_p1",
+      "payer_name": "SARAVANAN",
+      "amount": 1000,
+      "paid_at": "2026-09-08",
+      "reference": "UPI/1122334455"
+    },
+    {
+      "id": "case11_p2",
+      "payer_name": "UNKNOWN PAYER",
+      "amount": 1000,
+      "paid_at": "2026-09-08",
+      "reference": "UPI/5566778899"
+    }
+  ],
+  "simulated_extraction": {
+    "entries": [
+      {
+        "customer_name": "Saravanan",
+        "amount": 1000,
+        "entry_date": "2026-09-08",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.95
+      }
+    ],
+    "page_quality": "good"
+  }
+}

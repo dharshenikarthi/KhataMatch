@@ -1,0 +1,30 @@
+{
+  "extraction": {
+    "entries_count": 1,
+    "entries": [
+      {
+        "customer_name": "Meena",
+        "amount": 450,
+        "entry_date": "2026-09-18",
+        "type": "credit"
+      }
+    ]
+  },
+  "matching": {
+    "matches": [
+      {
+        "payment_id": "case06_p1",
+        "ledger_entry_id": "case06_l1",
+        "rule": "RULE_3_AMOUNT_DATE_DIFF_NAME",
+        "expected_type": "ambiguous_match"
+      }
+    ],
+    "unmatched_payments": [],
+    "unmatched_ledger_entries": []
+  },
+  "ai_decision": {
+    "expected_decision": "uncertain",
+    "min_confidence": 0.4,
+    "max_confidence": 0.7
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "ledger_raw": [
+    {
+      "id": "case23_l1",
+      "customer_name": "Prakash",
+      "amount": 1000,
+      "entry_date": "2026-09-01",
+      "type": "credit",
+      "status": "active"
+    },
+    {
+      "id": "case23_l2",
+      "customer_name": "Prakash",
+      "amount": 1500,
+      "entry_date": "2026-09-15",
+      "type": "credit",
+      "status": "active"
+    }
+  ],
+  "payments_raw": [
+    {
+      "id": "case23_p1",
+      "payer_name": "PRAKASH",
+      "amount": 1000,
+      "paid_at": "2026-09-02",
+      "reference": "UPI/3031323334"
+    }
+  ],
+  "simulated_extraction": {
+    "entries": [
+      {
+        "customer_name": "Prakash",
+        "amount": 1000,
+        "entry_date": "2026-09-01",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.95
+      },
+      {
+        "customer_name": "Prakash",
+        "amount": 1500,
+        "entry_date": "2026-09-15",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.95
+      }
+    ],
+    "page_quality": "good"
+  }
+}

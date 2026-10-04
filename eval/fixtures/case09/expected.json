@@ -1,0 +1,14 @@
+{
+  "extraction": {
+    "entries_count": 0,
+    "entries": []
+  },
+  "matching": {
+    "matches": [],
+    "unmatched_payments": [
+      "case09_p1"
+    ],
+    "unmatched_ledger_entries": []
+  },
+  "ai_decision": null
+}

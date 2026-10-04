@@ -1,0 +1,26 @@
+{
+  "extraction": {
+    "entries_count": 1,
+    "entries": [
+      {
+        "customer_name": "Lakshmi",
+        "amount": 950,
+        "entry_date": "",
+        "type": "credit"
+      }
+    ]
+  },
+  "matching": {
+    "matches": [
+      {
+        "payment_id": "case17_p1",
+        "ledger_entry_id": "case17_l1",
+        "rule": "RULE_2_NAME_AMOUNT_FAR_DATE",
+        "expected_type": "rule2_match"
+      }
+    ],
+    "unmatched_payments": [],
+    "unmatched_ledger_entries": []
+  },
+  "ai_decision": null
+}

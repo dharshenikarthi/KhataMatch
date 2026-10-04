@@ -1,0 +1,16 @@
+{
+  "ledger_raw": [],
+  "payments_raw": [
+    {
+      "id": "case09_p1",
+      "payer_name": "Amazon Pay Refund",
+      "amount": 1299,
+      "paid_at": "2026-09-11",
+      "reference": "UPI/8901234567"
+    }
+  ],
+  "simulated_extraction": {
+    "entries": [],
+    "page_quality": "good"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "ledger_raw": [
+    {
+      "id": "case24_l1",
+      "customer_name": "Geetha",
+      "amount": 600,
+      "entry_date": "2026-09-12",
+      "type": "credit",
+      "status": "active"
+    }
+  ],
+  "payments_raw": [
+    {
+      "id": "case24_p1",
+      "payer_name": "GEETHA",
+      "amount": 1000,
+      "paid_at": "2026-09-12",
+      "reference": "UPI/4041424344"
+    }
+  ],
+  "simulated_extraction": {
+    "entries": [
+      {
+        "customer_name": "Geetha",
+        "amount": 600,
+        "entry_date": "2026-09-12",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.95
+      }
+    ],
+    "page_quality": "good"
+  }
+}

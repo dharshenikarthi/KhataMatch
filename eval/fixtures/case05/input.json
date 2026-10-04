@@ -1,0 +1,34 @@
+{
+  "ledger_raw": [
+    {
+      "id": "case05_l1",
+      "customer_name": "Anand S",
+      "amount": 3000,
+      "entry_date": "2026-08-10",
+      "type": "credit",
+      "status": "active"
+    }
+  ],
+  "payments_raw": [
+    {
+      "id": "case05_p1",
+      "payer_name": "UPI/ANAND S",
+      "amount": 3000,
+      "paid_at": "2026-08-30",
+      "reference": "UPI/5678901234"
+    }
+  ],
+  "simulated_extraction": {
+    "entries": [
+      {
+        "customer_name": "Anand S",
+        "amount": 3000,
+        "entry_date": "2026-08-10",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.93
+      }
+    ],
+    "page_quality": "good"
+  }
+}

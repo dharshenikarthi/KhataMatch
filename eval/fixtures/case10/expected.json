@@ -1,0 +1,38 @@
+{
+  "extraction": {
+    "entries_count": 2,
+    "entries": [
+      {
+        "customer_name": "Rajesh",
+        "amount": 500,
+        "entry_date": "2026-09-05",
+        "type": "credit"
+      },
+      {
+        "customer_name": "Dinesh",
+        "amount": 500,
+        "entry_date": "2026-09-05",
+        "type": "credit"
+      }
+    ]
+  },
+  "matching": {
+    "matches": [
+      {
+        "payment_id": "case10_p1",
+        "ledger_entry_id": "case10_l1",
+        "rule": "RULE_1_EXACT_MATCH",
+        "expected_type": "exact_match"
+      },
+      {
+        "payment_id": "case10_p2",
+        "ledger_entry_id": "case10_l2",
+        "rule": "RULE_1_EXACT_MATCH",
+        "expected_type": "exact_match"
+      }
+    ],
+    "unmatched_payments": [],
+    "unmatched_ledger_entries": []
+  },
+  "ai_decision": null
+}

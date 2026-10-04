@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1050" width="800" height="1050">
+  <defs>
+    <!-- Paper texture & filters -->
+    <filter id="paper-texture" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
+      <feDiffuseLighting in="noise" lighting-color="#fffdf8" surfaceScale="1.2" result="light">
+        <feDistantLight azimuth="60" elevation="50" />
+      </feDiffuseLighting>
+      <feBlend mode="multiply" in="SourceGraphic" in2="light" />
+    </filter>
+    
+    <pattern id="ruled-lines" width="100" height="42" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="41" x2="800" y2="41" stroke="#a0c4e2" stroke-width="1.2" opacity="0.65" />
+    </pattern>
+  </defs>
+
+  <style>
+    .ink {
+      font-family: 'Comic Sans MS', 'Caveat', 'Segoe Print', cursive, sans-serif;
+      fill: #1a2b4c;
+    }
+    .ink-blue {
+      font-family: 'Comic Sans MS', 'Caveat', 'Segoe Print', cursive, sans-serif;
+      fill: #0c2d6b;
+    }
+    .ink-tamil {
+      font-family: 'Latha', 'Tamil MN', 'Nirmala UI', sans-serif;
+      fill: #1a2b4c;
+    }
+    .header-text {
+      font-family: 'Georgia', serif;
+      fill: #8b1e1e;
+      font-weight: bold;
+    }
+    .red-margin {
+      stroke: #d64040;
+      stroke-width: 1.8;
+      opacity: 0.8;
+    }
+  </style>
+
+  <!-- Notebook Page Background (Cream / Aged Ledger Paper) -->
+  <rect width="800" height="1050" fill="#fcf9ee" rx="8" />
+  
+  <!-- Subtle Page Border & Crease Shadow -->
+  <rect x="2" y="2" width="796" height="1046" fill="none" stroke="#d5ceb8" stroke-width="2" rx="6" />
+  <line x1="25" y1="0" x2="25" y2="1050" stroke="#000000" stroke-width="6" opacity="0.04" />
+  <line x1="30" y1="0" x2="30" y2="1050" stroke="#000000" stroke-width="2" opacity="0.02" />
+
+  <!-- Ruled Lines Grid across the page -->
+  <rect x="0" y="110" width="800" height="920" fill="url(#ruled-lines)" />
+
+  <!-- Red Vertical Margins (Standard Indian Notebook) -->
+  <line x1="120" y1="0" x2="120" y2="1050" class="red-margin" />
+  <line x1="124" y1="0" x2="124" y2="1050" class="red-margin" opacity="0.5" />
+  <line x1="600" y1="110" x2="600" y2="1030" stroke="#a0c4e2" stroke-width="1.2" stroke-dasharray="3,3" />
+
+  <!-- Top Notebook Header -->
+  <text x="400" y="48" text-anchor="middle" class="header-text" font-size="16">卐 ஸ்ரீ கணபதி துணை 卐</text>
+  <text x="400" y="82" text-anchor="middle" class="header-text" font-size="20">முருகன் ஸ்டோர்ஸ் - கடன் நோட்டு (UDHAAR LEDGER)</text>
+  <line x1="160" y1="95" x2="640" y2="95" stroke="#8b1e1e" stroke-width="1.5" />
+
+  <!-- Column Headers -->
+  <text x="50" y="140" class="ink" font-size="15" font-weight="bold">தேதி/Date</text>
+  <text x="210" y="140" class="ink" font-size="16" font-weight="bold">பெயர் / Customer Details</text>
+  <text x="640" y="140" class="ink" font-size="16" font-weight="bold">பற்று ₹ (Due)</text>
+
+  <!-- Row 1: Murugan -->
+  <text x="35" y="184" class="ink" font-size="15">10-09-26</text>
+  <text x="145" y="184" class="ink-blue" font-size="20" font-weight="bold">Murugan (முருகன் - Rice bag)</text>
+  <text x="640" y="184" class="ink-blue" font-size="21" font-weight="bold">1,250 /-</text>
+
+  <!-- Row 2: Lakshmi -->
+  <text x="35" y="226" class="ink" font-size="15">11-09-26</text>
+  <text x="145" y="226" class="ink" font-size="20">Lakshmi (லக்ஷ்மி டீச்சர்)</text>
+  <text x="640" y="226" class="ink" font-size="21" font-weight="bold">800 /-</text>
+
+  <!-- Row 3: Ravi Kumar -->
+  <text x="35" y="268" class="ink" font-size="15">12-09-26</text>
+  <text x="145" y="268" class="ink-blue" font-size="20" font-weight="bold">Ravi Kumar (ரவி குமார் - Oil tin)</text>
+  <text x="640" y="268" class="ink-blue" font-size="21" font-weight="bold">2,000 /-</text>
+
+  <!-- Row 4: Priya -->
+  <text x="35" y="310" class="ink" font-size="15">13-09-26</text>
+  <text x="145" y="310" class="ink" font-size="20">Priya (பிரியா - Provisions)</text>
+  <text x="640" y="310" class="ink" font-size="21" font-weight="bold">750 /-</text>
+
+  <!-- Row 5: Suresh -->
+  <text x="35" y="352" class="ink" font-size="15">14-09-26</text>
+  <text x="145" y="352" class="ink-blue" font-size="20" font-weight="bold">Suresh (சுரேஷ் - Masala items)</text>
+  <text x="640" y="352" class="ink-blue" font-size="21" font-weight="bold">1,500 /-</text>
+
+  <!-- Row 6: Meena -->
+  <text x="35" y="394" class="ink" font-size="15">15-09-26</text>
+  <text x="145" y="394" class="ink" font-size="20">Meena (மீனா - Milk &amp; Ghee)</text>
+  <text x="640" y="394" class="ink" font-size="21" font-weight="bold">950 /-</text>
+
+  <!-- Row 7: Arun (Struck out row / paid cash) -->
+  <text x="35" y="436" class="ink" font-size="15" opacity="0.6">15-09-26</text>
+  <text x="145" y="436" class="ink" font-size="20" opacity="0.6">Arun (அருண்)</text>
+  <text x="640" y="436" class="ink" font-size="21" opacity="0.6">400 /-</text>
+  <line x1="30" y1="432" x2="720" y2="432" stroke="#b91c1c" stroke-width="2.2" opacity="0.75" />
+  <text x="460" y="430" fill="#b91c1c" font-size="12" font-weight="bold" transform="rotate(-3, 460, 430)">[ ரொக்கம் முடிந்தது / Paid Cash ]</text>
+
+  <!-- Row 8: K. Murugan (Ambiguous similar name test case) -->
+  <text x="35" y="478" class="ink" font-size="15">16-09-26</text>
+  <text x="145" y="478" class="ink-blue" font-size="20">K. Murugan (கே. முருகன் - Tailor)</text>
+  <text x="640" y="478" class="ink-blue" font-size="21" font-weight="bold">1,250 /-</text>
+
+  <!-- Bottom Shop Stamp / Signature simulation -->
+  <g transform="translate(540, 880) rotate(-6)">
+    <rect x="0" y="0" width="180" height="70" rx="8" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,2" opacity="0.7" />
+    <text x="90" y="28" text-anchor="middle" fill="#2563eb" font-family="sans-serif" font-size="12" font-weight="bold" opacity="0.8">MURUGAN STORES</text>
+    <text x="90" y="48" text-anchor="middle" fill="#2563eb" font-family="sans-serif" font-size="10" opacity="0.8">MADURAI • VERIFIED</text>
+  </g>
+</svg>

@@ -1,0 +1,73 @@
+{
+  "ledger_raw": [
+    {
+      "id": "case25_l1",
+      "customer_name": "Babu",
+      "amount": 1500,
+      "entry_date": "2026-09-10",
+      "type": "credit",
+      "status": "active"
+    },
+    {
+      "id": "case25_l2",
+      "customer_name": "Sundar",
+      "amount": 2000,
+      "entry_date": "2026-09-11",
+      "type": "credit",
+      "status": "active"
+    },
+    {
+      "id": "case25_l3",
+      "customer_name": "Kavitha",
+      "amount": 750,
+      "entry_date": "2026-09-12",
+      "type": "credit",
+      "status": "active"
+    }
+  ],
+  "payments_raw": [
+    {
+      "id": "case25_p1",
+      "payer_name": "BABU",
+      "amount": 1500,
+      "paid_at": "2026-09-10",
+      "reference": "UPI/5051525354"
+    },
+    {
+      "id": "case25_p2",
+      "payer_name": "SUNDAR",
+      "amount": 500,
+      "paid_at": "2026-09-11",
+      "reference": "UPI/6061626364"
+    }
+  ],
+  "simulated_extraction": {
+    "entries": [
+      {
+        "customer_name": "Babu",
+        "amount": 1500,
+        "entry_date": "2026-09-10",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.95
+      },
+      {
+        "customer_name": "Sundar",
+        "amount": 2000,
+        "entry_date": "2026-09-11",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.95
+      },
+      {
+        "customer_name": "Kavitha",
+        "amount": 750,
+        "entry_date": "2026-09-12",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.92
+      }
+    ],
+    "page_quality": "good"
+  }
+}

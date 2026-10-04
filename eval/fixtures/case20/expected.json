@@ -1,0 +1,29 @@
+{
+  "extraction": {
+    "entries_count": 1,
+    "entries": [
+      {
+        "customer_name": "Chitra Akka",
+        "amount": 2200,
+        "entry_date": "2026-09-15",
+        "type": "credit"
+      }
+    ]
+  },
+  "matching": {
+    "matches": [
+      {
+        "payment_id": "case20_p1",
+        "ledger_entry_id": "case20_l1",
+        "rule": "RULE_3_AMOUNT_DATE_DIFF_NAME",
+        "expected_type": "ambiguous_match"
+      }
+    ],
+    "unmatched_payments": [],
+    "unmatched_ledger_entries": []
+  },
+  "ai_decision": {
+    "expected_decision": "likely_match",
+    "min_confidence": 0.85
+  }
+}

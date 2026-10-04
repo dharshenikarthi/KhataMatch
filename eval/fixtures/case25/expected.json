@@ -1,0 +1,46 @@
+{
+  "extraction": {
+    "entries_count": 3,
+    "entries": [
+      {
+        "customer_name": "Babu",
+        "amount": 1500,
+        "entry_date": "2026-09-10",
+        "type": "credit"
+      },
+      {
+        "customer_name": "Sundar",
+        "amount": 2000,
+        "entry_date": "2026-09-11",
+        "type": "credit"
+      },
+      {
+        "customer_name": "Kavitha",
+        "amount": 750,
+        "entry_date": "2026-09-12",
+        "type": "credit"
+      }
+    ]
+  },
+  "matching": {
+    "matches": [
+      {
+        "payment_id": "case25_p1",
+        "ledger_entry_id": "case25_l1",
+        "rule": "RULE_1_EXACT_MATCH",
+        "expected_type": "exact_match"
+      },
+      {
+        "payment_id": "case25_p2",
+        "ledger_entry_id": "case25_l2",
+        "rule": "RULE_4_PARTIAL_PAYMENT",
+        "expected_type": "partial_payment"
+      }
+    ],
+    "unmatched_payments": [],
+    "unmatched_ledger_entries": [
+      "case25_l3"
+    ]
+  },
+  "ai_decision": null
+}

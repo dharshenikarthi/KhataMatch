@@ -1,0 +1,57 @@
+{
+  "ledger_raw": [
+    {
+      "id": "case10_l1",
+      "customer_name": "Rajesh",
+      "amount": 500,
+      "entry_date": "2026-09-05",
+      "type": "credit",
+      "status": "active"
+    },
+    {
+      "id": "case10_l2",
+      "customer_name": "Dinesh",
+      "amount": 500,
+      "entry_date": "2026-09-05",
+      "type": "credit",
+      "status": "active"
+    }
+  ],
+  "payments_raw": [
+    {
+      "id": "case10_p1",
+      "payer_name": "RAJESH",
+      "amount": 500,
+      "paid_at": "2026-09-05",
+      "reference": "UPI/9012345678"
+    },
+    {
+      "id": "case10_p2",
+      "payer_name": "DINESH",
+      "amount": 500,
+      "paid_at": "2026-09-05",
+      "reference": "UPI/0123456789"
+    }
+  ],
+  "simulated_extraction": {
+    "entries": [
+      {
+        "customer_name": "Rajesh",
+        "amount": 500,
+        "entry_date": "2026-09-05",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.95
+      },
+      {
+        "customer_name": "Dinesh",
+        "amount": 500,
+        "entry_date": "2026-09-05",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.95
+      }
+    ],
+    "page_quality": "good"
+  }
+}

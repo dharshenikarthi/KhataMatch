@@ -1,0 +1,26 @@
+{
+  "extraction": {
+    "entries_count": 1,
+    "entries": [
+      {
+        "customer_name": "Unknown",
+        "amount": 400,
+        "entry_date": "2026-09-14",
+        "type": "credit"
+      }
+    ]
+  },
+  "matching": {
+    "matches": [
+      {
+        "payment_id": "case16_p1",
+        "ledger_entry_id": "case16_l1",
+        "rule": "RULE_3_AMOUNT_DATE_DIFF_NAME",
+        "expected_type": "ambiguous_match"
+      }
+    ],
+    "unmatched_payments": [],
+    "unmatched_ledger_entries": []
+  },
+  "ai_decision": null
+}

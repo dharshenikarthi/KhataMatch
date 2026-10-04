@@ -1,0 +1,21 @@
+{
+  "extraction": {
+    "entries_count": 1,
+    "entries": [
+      {
+        "customer_name": "Deepa",
+        "amount": 3500,
+        "entry_date": "2026-08-25",
+        "type": "credit"
+      }
+    ]
+  },
+  "matching": {
+    "matches": [],
+    "unmatched_payments": [],
+    "unmatched_ledger_entries": [
+      "case08_l1"
+    ]
+  },
+  "ai_decision": null
+}

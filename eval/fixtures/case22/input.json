@@ -1,0 +1,45 @@
+{
+  "ledger_raw": [
+    {
+      "id": "case22_l1",
+      "customer_name": "Ganesh",
+      "amount": 500,
+      "entry_date": "2026-09-10",
+      "type": "credit",
+      "status": "active"
+    }
+  ],
+  "payments_raw": [
+    {
+      "id": "case22_p1",
+      "payer_name": "GANESH TRAVELS",
+      "amount": 5000,
+      "paid_at": "2026-09-10",
+      "reference": "UPI/2021222324"
+    }
+  ],
+  "simulated_extraction": {
+    "entries": [
+      {
+        "customer_name": "Ganesh",
+        "amount": 500,
+        "entry_date": "2026-09-10",
+        "type": "credit",
+        "status": "active",
+        "confidence": 0.95
+      }
+    ],
+    "page_quality": "good"
+  },
+  "simulated_ai_response": {
+    "decision": "unlikely_match",
+    "confidence_category": "low",
+    "confidence": 0.15,
+    "reasons": [
+      "Amount ₹5,000 is 10 times the ledger credit amount ₹500, and payer represents a commercial enterprise."
+    ],
+    "warnings": [
+      "Do not match this payment to individual customer due."
+    ]
+  }
+}
