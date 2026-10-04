@@ -71,18 +71,24 @@ export const ReviewFixPage: React.FC = () => {
   const loadEntriesAndImage = async () => {
     setLoading(true)
     try {
-      const { data } = await ledgerReviewService.getLedgerEntries(userId)
-      if (data && data.length > 0) {
-        setEntries(data)
-        setExtractedData(data)
-      } else if (state.extractedEntries && state.extractedEntries.length > 0) {
+      if (state.extractedEntries && state.extractedEntries.length > 0) {
         setEntries(state.extractedEntries)
+      } else {
+        const { data } = await ledgerReviewService.getLedgerEntries(userId)
+        if (data && data.length > 0) {
+          setEntries(data)
+          setExtractedData(data)
+        }
       }
 
-      // Load signed URL for original image
-      const imgPath = state.ledger?.storagePath || state.ledger?.previewUrl || '/sample-data/sample-ledger.svg'
-      const { url } = await ledgerReviewService.getSignedImageUrl(imgPath)
-      setSignedImageUrl(url || state.ledger?.previewUrl || '/sample-data/sample-ledger.svg')
+      // Load image preview: prioritize freshly uploaded image previewUrl
+      if (state.ledger?.previewUrl) {
+        setSignedImageUrl(state.ledger.previewUrl)
+      } else {
+        const imgPath = state.ledger?.storagePath || '/sample-data/sample-ledger.svg'
+        const { url } = await ledgerReviewService.getSignedImageUrl(imgPath)
+        setSignedImageUrl(url || '/sample-data/sample-ledger.svg')
+      }
     } catch (err) {
       console.error('Failed to load review data:', err)
       showFeedback('Unable to load extracted entries. Please refresh.', 'error')
@@ -93,7 +99,7 @@ export const ReviewFixPage: React.FC = () => {
 
   useEffect(() => {
     loadEntriesAndImage()
-  }, [userId])
+  }, [userId, state.ledger?.previewUrl, state.extractedEntries])
 
   // Zoom controls
   const handleZoomIn = () => setZoomLevel((prev) => Math.min(prev + 0.25, 2.5))

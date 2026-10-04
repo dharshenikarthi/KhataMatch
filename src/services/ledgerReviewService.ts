@@ -18,7 +18,13 @@ export const ledgerReviewService = {
       return { url: null, error: null }
     }
 
-    if (storagePath.startsWith('http://') || storagePath.startsWith('https://') || storagePath.startsWith('/') || storagePath.startsWith('data:')) {
+    if (
+      storagePath.startsWith('http://') ||
+      storagePath.startsWith('https://') ||
+      storagePath.startsWith('/') ||
+      storagePath.startsWith('data:') ||
+      storagePath.startsWith('blob:')
+    ) {
       return { url: storagePath, error: null }
     }
 

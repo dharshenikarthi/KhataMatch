@@ -63,7 +63,12 @@ export function useWorkflowState() {
   }, [state])
 
   const setLedger = (ledger: UploadedLedgerInfo | null) => {
-    setState((prev) => ({ ...prev, ledger }))
+    setState((prev) => ({
+      ...prev,
+      ledger,
+      sampleLoaded: ledger?.isSample ?? false,
+      extractedEntries: ledger?.isSample ? prev.extractedEntries : [],
+    }))
   }
 
   const setStatement = (statement: UploadedStatementInfo | null) => {
