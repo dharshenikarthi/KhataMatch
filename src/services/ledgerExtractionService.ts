@@ -53,58 +53,55 @@ export const ledgerExtractionService = {
   async extractFromImage(
     userId: string,
     imagePath: string,
-    fallbackImageContent?: string | File | Blob
+    fallbackImageContent?: string | File | Blob,
+    isSample = false
   ): Promise<{ data: ExtractionResult | null; error: Error | null }> {
     try {
       // 1. Check for Direct Gemini API Key
       const directApiKey = getGeminiApiKey()
       if (directApiKey && fallbackImageContent) {
-        try {
-          let fileOrBlob: File | Blob
-          if (typeof fallbackImageContent === 'string') {
-            const res = await fetch(fallbackImageContent)
-            fileOrBlob = await res.blob()
-          } else {
-            fileOrBlob = fallbackImageContent
+        let fileOrBlob: File | Blob
+        if (typeof fallbackImageContent === 'string') {
+          const res = await fetch(fallbackImageContent)
+          fileOrBlob = await res.blob()
+        } else {
+          fileOrBlob = fallbackImageContent
+        }
+
+        const geminiResult = await callGeminiVisionExtract(fileOrBlob)
+        if (geminiResult.entries && geminiResult.entries.length > 0) {
+          const entriesToSave = geminiResult.entries.map((item: any) => ({
+            customer_name: item.customer_name,
+            name_normalized: item.name_normalized || item.customer_name?.toLowerCase().trim() || '',
+            amount: Number(item.amount) || 0,
+            entry_date: item.date || item.entry_date || new Date().toISOString().split('T')[0],
+            type: (item.type === 'payment' ? 'payment' : 'credit') as any,
+            status: (item.status === 'struck_out' ? 'struck_out' : 'active') as any,
+            confidence: Number(item.confidence) || 0.9,
+            source_image_path: imagePath,
+            confirmed: false,
+            note: item.note || null,
+          }))
+
+          // Clear previous unconfirmed extractions for this image
+          const existing = await ledgerService.getEntries(userId)
+          const unconfirmedToDelete = existing.data.filter(
+            (e) => !e.confirmed
+          )
+          for (const item of unconfirmedToDelete) {
+            await ledgerService.deleteEntry(userId, item.id)
           }
 
-          const geminiResult = await callGeminiVisionExtract(fileOrBlob)
-          if (geminiResult.entries && geminiResult.entries.length > 0) {
-            const entriesToSave = geminiResult.entries.map((item: any) => ({
-              customer_name: item.customer_name,
-              name_normalized: item.name_normalized || item.customer_name.toLowerCase().trim(),
-              amount: Number(item.amount) || 0,
-              entry_date: item.date || item.entry_date || new Date().toISOString().split('T')[0],
-              type: (item.type === 'payment' ? 'payment' : 'credit') as any,
-              status: (item.status === 'struck_out' ? 'struck_out' : 'active') as any,
-              confidence: Number(item.confidence) || 0.9,
+          const saved = await ledgerService.saveEntries(userId, entriesToSave)
+          return {
+            data: {
+              entries: saved.data,
+              page_quality: geminiResult.page_quality || 'good',
+              warnings: geminiResult.warnings || [],
               source_image_path: imagePath,
-              confirmed: false,
-              note: item.note || null,
-            }))
-
-            // Clear previous unconfirmed extractions for this image
-            const existing = await ledgerService.getEntries(userId)
-            const unconfirmedToDelete = existing.data.filter(
-              (e) => !e.confirmed
-            )
-            for (const item of unconfirmedToDelete) {
-              await ledgerService.deleteEntry(userId, item.id)
-            }
-
-            const saved = await ledgerService.saveEntries(userId, entriesToSave)
-            return {
-              data: {
-                entries: saved.data,
-                page_quality: geminiResult.page_quality || 'good',
-                warnings: geminiResult.warnings || [],
-                source_image_path: imagePath,
-              },
-              error: null,
-            }
+            },
+            error: null,
           }
-        } catch (visionErr: any) {
-          console.warn('Direct Gemini vision extraction failed, falling back:', visionErr)
         }
       }
 
@@ -118,7 +115,7 @@ export const ledgerExtractionService = {
         })
 
         if (error || !data?.success) {
-          console.warn('Edge Function extraction warning, checking fallback:', error || data?.error)
+          console.warn('Edge Function extraction warning:', error || data?.error)
           if (data?.error) {
             return { data: null, error: new Error(data.error) }
           }
@@ -160,6 +157,17 @@ export const ledgerExtractionService = {
           }
         }
       }
+
+      // If user uploaded a custom ledger image and no valid Gemini OCR key is set
+      if (!isSample) {
+        return {
+          data: null,
+          error: new Error(
+            'Google Gemini API key required for real OCR extraction. Please click on Shop Settings (top right) or configure VITE_GEMINI_API_KEY in .env with a key from https://aistudio.google.com/app/apikey (starts with AIzaSy).'
+          ),
+        }
+      }
+
 
       // Offline / Demo / Synthetic Gemini Extraction (Strictly follows the exact Section 8/9 rules)
       const syntheticExtracted: Partial<LedgerEntry>[] = [

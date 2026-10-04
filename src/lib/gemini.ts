@@ -79,49 +79,76 @@ export async function callGeminiVisionExtract(
   fileOrBlob: File | Blob
 ): Promise<{ entries: Partial<LedgerEntry>[]; page_quality: 'good' | 'fair' | 'poor'; warnings: string[] }> {
   const apiKey = getGeminiApiKey()
-  if (!apiKey) {
-    throw new Error('No Gemini API key provided.')
+  if (!apiKey || !apiKey.trim()) {
+    throw new Error('No Gemini API key found. Please add your Google AI Studio API key (starts with AIzaSy) in Shop Settings.')
+  }
+
+  const cleanKey = apiKey.trim()
+  if (!cleanKey.startsWith('AIzaSy')) {
+    throw new Error('The provided Gemini API key appears invalid (Google Gemini keys start with "AIzaSy"). Please get a free API key from https://aistudio.google.com/app/apikey')
   }
 
   const imagePart = await fileToGenerativePart(fileOrBlob)
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`
+  const models = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-2.0-flash']
+  let lastError: Error | null = null
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [
-        {
-          role: 'user',
-          parts: [
-            { text: EXTRACTION_SYSTEM_PROMPT },
-            imagePart,
+  for (const model of models) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${cleanKey}`
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: 'user',
+              parts: [
+                { text: EXTRACTION_SYSTEM_PROMPT },
+                imagePart,
+              ],
+            },
           ],
-        },
-      ],
-      generationConfig: {
-        responseMimeType: 'application/json',
-        temperature: 0.1,
-      },
-    }),
-  })
+          generationConfig: {
+            responseMimeType: 'application/json',
+            temperature: 0.1,
+          },
+        }),
+      })
 
-  if (!response.ok) {
-    const errText = await response.text()
-    throw new Error(`Gemini API error (${response.status}): ${errText}`)
+      if (!response.ok) {
+        const errText = await response.text()
+        let parsedErrMsg = errText
+        try {
+          const errObj = JSON.parse(errText)
+          parsedErrMsg = errObj?.error?.message || errText
+        } catch {
+          // ignore
+        }
+        throw new Error(`Gemini API error (${response.status}): ${parsedErrMsg}`)
+      }
+
+      const json = await response.json()
+      const candidateText = json.candidates?.[0]?.content?.parts?.[0]?.text
+      if (!candidateText) {
+        throw new Error('Gemini API returned an empty response.')
+      }
+
+      const parsed = JSON.parse(candidateText)
+      return {
+        entries: parsed.entries || [],
+        page_quality: parsed.page_quality || 'good',
+        warnings: parsed.warnings || [],
+      }
+    } catch (err: any) {
+      lastError = err
+      // If error is 400 or invalid key, don't keep retrying other models with the same bad key
+      if (err.message && (err.message.includes('API_KEY_INVALID') || err.message.includes('API key not valid') || err.message.includes('starts with "AIzaSy"'))) {
+        throw err
+      }
+    }
   }
 
-  const json = await response.json()
-  const candidateText = json.candidates?.[0]?.content?.parts?.[0]?.text
-  if (!candidateText) {
-    throw new Error('Gemini API returned an empty response.')
-  }
-
-  const parsed = JSON.parse(candidateText)
-  return {
-    entries: parsed.entries || [],
-    page_quality: parsed.page_quality || 'good',
-    warnings: parsed.warnings || [],
-  }
+  throw lastError || new Error('Failed to extract ledger entries using Gemini.')
 }
+
