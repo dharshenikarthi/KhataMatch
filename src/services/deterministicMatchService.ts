@@ -269,6 +269,8 @@ export const deterministicMatchService = {
           ? 'exact'
           : 'ambiguous'
 
+        const isConfirmedExact = candidate.rule === 'RULE_1_EXACT_MATCH' && Boolean(candidate.ledgerEntry.confirmed)
+
         matchedResults.push({
           id: `match_${pId}_${lId}`,
           user_id: candidate.payment.user_id,
@@ -277,8 +279,8 @@ export const deterministicMatchService = {
           match_type: matchType,
           confidence: candidate.confidence,
           reason: candidate.reason,
-          user_confirmed: false,
-          status: 'suggested',
+          user_confirmed: isConfirmedExact,
+          status: isConfirmedExact ? 'confirmed' : 'suggested',
           rule: candidate.rule,
           date_diff_days: candidate.dateDiffDays,
           payment: candidate.payment,

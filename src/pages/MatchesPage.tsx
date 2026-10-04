@@ -239,6 +239,28 @@ export const MatchesPage: React.FC = () => {
     }
   }
 
+  const eligibleExactMatches = useMemo(
+    () => matches.filter((m) => !m.user_confirmed && m.ledger_entry_id && m.confidence >= 0.75 && m.status !== 'rejected'),
+    [matches]
+  )
+
+  const handleConfirmAllExact = async () => {
+    if (eligibleExactMatches.length === 0) return
+    setIsRerunning(true)
+    try {
+      const updated = matches.map((m) =>
+        !m.user_confirmed && m.ledger_entry_id && m.confidence >= 0.75 && m.status !== 'rejected'
+          ? { ...m, user_confirmed: true, status: 'confirmed' as const }
+          : m
+      )
+      const saved = await matchService.saveMatches(userId, updated)
+      setMatches(saved.data)
+      showToast(`✓ Successfully confirmed all ${eligibleExactMatches.length} exact matches.`)
+    } finally {
+      setIsRerunning(false)
+    }
+  }
+
   // --- CONFIRM / REJECT ACTIONS ---
   const handleConfirmMatch = async (match: PaymentMatch) => {
     const { data, error } = await matchService.confirmMatch(
@@ -454,6 +476,19 @@ export const MatchesPage: React.FC = () => {
               </span>
             )}
           </Button>
+
+          {eligibleExactMatches.length > 0 && (
+            <Button
+              type="button"
+              variant="outline"
+              disabled={isRerunning || loading}
+              onClick={handleConfirmAllExact}
+              className="text-xs font-bold rounded-xl border-emerald-300 text-emerald-800 bg-emerald-50/60 hover:bg-emerald-100"
+            >
+              <CheckCircle2 className="w-3.5 h-3.5 mr-1.5 text-emerald-600" />
+              <span>Confirm All Exact ({eligibleExactMatches.length})</span>
+            </Button>
+          )}
 
           <Button
             type="button"

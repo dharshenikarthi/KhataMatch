@@ -270,10 +270,10 @@ export const ledgerExtractionService = {
         },
       ]
 
-      // Delete prior unconfirmed extractions for this image
+      // Delete prior unconfirmed or sample extractions to avoid duplicate record accumulation
       const existing = await ledgerService.getEntries(userId)
       const unconfirmedToDelete = existing.data.filter(
-        (e) => e.source_image_path === imagePath && !e.confirmed
+        (e) => !e.confirmed || e.source_image_path?.includes('sample') || isSample
       )
       for (const item of unconfirmedToDelete) {
         await ledgerService.deleteEntry(userId, item.id)
