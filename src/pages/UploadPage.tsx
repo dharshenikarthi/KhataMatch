@@ -201,7 +201,7 @@ export const UploadPage: React.FC = () => {
       const extractRes = await ledgerExtractionService.extractFromImage(
         userId,
         storagePath,
-        state.ledger.previewUrl
+        state.ledger.fileObj || state.ledger.previewUrl
       )
 
       if (extractRes.error || !extractRes.data) {

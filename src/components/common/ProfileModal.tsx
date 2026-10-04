@@ -3,8 +3,9 @@ import { useAuth } from '@/hooks/useAuth'
 import { ledgerService } from '@/services/ledgerService'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Store, Languages, Volume2, Trash2, X, Check, Loader2, AlertTriangle } from 'lucide-react'
+import { Store, Languages, Volume2, Trash2, X, Check, Loader2, AlertTriangle, Key, Sparkles } from 'lucide-react'
 import { Language, ReminderTone } from '@/types'
+import { getGeminiApiKey, setGeminiApiKey } from '@/lib/gemini'
 
 interface ProfileModalProps {
   isOpen: boolean
@@ -16,6 +17,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
   const [shopName, setShopName] = useState(profile?.shop_name || '')
   const [language, setLanguage] = useState<Language>(profile?.preferred_language || 'english')
   const [tone, setTone] = useState<ReminderTone>(profile?.tone || 'polite')
+  const [apiKey, setApiKey] = useState<string>(() => getGeminiApiKey() || '')
   const [isSaving, setIsSaving] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [showConfirmDelete, setShowConfirmDelete] = useState(false)
@@ -29,6 +31,8 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
     setIsSaving(true)
     setErrorMsg(null)
     setSuccessMsg(null)
+
+    setGeminiApiKey(apiKey.trim())
 
     const { error } = await updateProfile({
       shop_name: shopName,
@@ -163,6 +167,34 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Google Gemini API Key Configuration */}
+          <div className="space-y-1.5 p-3.5 bg-slate-50 rounded-2xl border border-slate-200/80">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Google Gemini API Key</span>
+              </label>
+              <a
+                href="https://aistudio.google.com/app/apikey"
+                target="_blank"
+                rel="noreferrer"
+                className="text-[10px] text-emerald-600 hover:text-emerald-700 font-semibold underline"
+              >
+                Get Free API Key ↗
+              </a>
+            </div>
+            <Input
+              type="password"
+              placeholder="AIzaSy..."
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              className="font-mono text-xs bg-white"
+            />
+            <p className="text-[10px] text-slate-500 leading-tight">
+              Enables real-time handwritten AI OCR vision extraction for any custom photos and intelligent ambiguous matching. Stored securely in your browser.
+            </p>
           </div>
 
           {/* Actions */}

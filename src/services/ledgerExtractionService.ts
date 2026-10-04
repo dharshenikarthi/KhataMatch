@@ -1,6 +1,7 @@
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import { ledgerService } from '@/services/ledgerService'
 import { LedgerEntry } from '@/types'
+import { getGeminiApiKey, callGeminiVisionExtract } from '@/lib/gemini'
 
 export interface ExtractionResult {
   entries: LedgerEntry[]
@@ -47,26 +48,77 @@ export const ledgerExtractionService = {
   },
 
   /**
-   * Calls the extract-ledger Supabase Edge Function to extract structured rows using Gemini
+   * Extracts structured rows using Gemini Vision (Direct API key or Supabase Edge Function)
    */
   async extractFromImage(
     userId: string,
     imagePath: string,
-    fallbackImageContent?: string
+    fallbackImageContent?: string | File | Blob
   ): Promise<{ data: ExtractionResult | null; error: Error | null }> {
     try {
+      // 1. Check for Direct Gemini API Key
+      const directApiKey = getGeminiApiKey()
+      if (directApiKey && fallbackImageContent) {
+        try {
+          let fileOrBlob: File | Blob
+          if (typeof fallbackImageContent === 'string') {
+            const res = await fetch(fallbackImageContent)
+            fileOrBlob = await res.blob()
+          } else {
+            fileOrBlob = fallbackImageContent
+          }
+
+          const geminiResult = await callGeminiVisionExtract(fileOrBlob)
+          if (geminiResult.entries && geminiResult.entries.length > 0) {
+            const entriesToSave = geminiResult.entries.map((item: any) => ({
+              customer_name: item.customer_name,
+              name_normalized: item.name_normalized || item.customer_name.toLowerCase().trim(),
+              amount: Number(item.amount) || 0,
+              entry_date: item.date || item.entry_date || new Date().toISOString().split('T')[0],
+              type: (item.type === 'payment' ? 'payment' : 'credit') as any,
+              status: (item.status === 'struck_out' ? 'struck_out' : 'active') as any,
+              confidence: Number(item.confidence) || 0.9,
+              source_image_path: imagePath,
+              confirmed: false,
+              note: item.note || null,
+            }))
+
+            // Clear previous unconfirmed extractions for this image
+            const existing = await ledgerService.getEntries(userId)
+            const unconfirmedToDelete = existing.data.filter(
+              (e) => !e.confirmed
+            )
+            for (const item of unconfirmedToDelete) {
+              await ledgerService.deleteEntry(userId, item.id)
+            }
+
+            const saved = await ledgerService.saveEntries(userId, entriesToSave)
+            return {
+              data: {
+                entries: saved.data,
+                page_quality: geminiResult.page_quality || 'good',
+                warnings: geminiResult.warnings || [],
+                source_image_path: imagePath,
+              },
+              error: null,
+            }
+          }
+        } catch (visionErr: any) {
+          console.warn('Direct Gemini vision extraction failed, falling back:', visionErr)
+        }
+      }
+
       if (isSupabaseConfigured) {
         // Real Supabase Edge Function Call
         const { data, error } = await supabase.functions.invoke('extract-ledger', {
           body: {
             image_path: imagePath,
-            base64_image: fallbackImageContent,
+            base64_image: typeof fallbackImageContent === 'string' ? fallbackImageContent : undefined,
           },
         })
 
         if (error || !data?.success) {
           console.warn('Edge Function extraction warning, checking fallback:', error || data?.error)
-          // If edge function returned an error message, pass the friendly version
           if (data?.error) {
             return { data: null, error: new Error(data.error) }
           }
